@@ -1,0 +1,10 @@
+.sidebar{
+    &__container{
+        width: 25%;
+        background: blue;
+        height: 100vh;
+    }
+    &__active{
+        color: yellow;
+    }
+}

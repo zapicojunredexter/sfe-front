@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import AuthService from '../../services/auth.service';
 import Header from '../../components/header';
-import SideBar from '../../components/admin.sidebar';
+import SideBar from '../../components/vendor.sidebar';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 
@@ -13,28 +13,35 @@ class Container extends React.PureComponent<> {
             id: 1,
             first_name: 'Vincent',
             last_name: 'Otto',
-            user_type: 'Vendor'
+            ordered_products: 'Hawaiian Pizza',
+            quantity: '5 boxes'
          },
          {
+            id: 2,
             first_name: 'Jacob',
             last_name: 'Thornton',
-            user_type: 'Customer'
+            ordered_products: 'Siomai',
+            quantity: '1 pack'
          },
          {
+            id: 3,
             first_name: 'Larry',
             last_name: 'Lee',
-            user_type: 'Customer'
+            ordered_products: 'Lumpia Shanghai',
+            quantity: '25 pieces'
          },
          {
+            id: 4,
             first_name: 'Harry',
             last_name: 'Potter',
-            user_type: 'Vendor'
+            ordered_products: 'Fish Ball',
+            quantity: '1 pack'
          }]
 
          const columns =[{
             Header: 'Id',
             accessor: 'id',
-            width: 50,
+            width: 100,
             filterable: true
          },
          {
@@ -48,20 +55,14 @@ class Container extends React.PureComponent<> {
             filterable: true
          },
          {
-            Header: 'User Type',
-            accessor: 'user_type',
-            width: 110,
+            Header: 'Ordered Product/s',
+            accessor: 'ordered_products',
             filterable: true
-
          },
          {
-            Header: 'Actions',
-            Cell: row => (
-                <div><button type="button" class="btn btn-success btn-sm">Activate</button>
-                <button type="button" class="btn btn-danger btn-sm">Deactivate</button></div>
-                
-            )
-           
+            Header: 'Quantity',
+            accessor: 'quantity',
+            width: 110
          }]
 
         return (
@@ -79,7 +80,7 @@ class Container extends React.PureComponent<> {
 
                             <div className="card-body">
                                 <h4 className="mb-2 mb-sm-0 pt-1">
-                                    <span>Users</span>
+                                    <span>Order History</span>
                                 </h4>
 
                                 <ReactTable style={{marginTop: "2em"}}

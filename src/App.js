@@ -2,6 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Switch, Route, Redirect } from "react-router-dom";
 import Dashboard from './containers/dashboard';
+import VendorDashboard from './containers/vendor.dashboard';
+import Products from './containers/products';
+import OrderHistory from './containers/order.history';
+import Users from './containers/users';
 import Login from './containers/login';
 import { setIsLoggedOut } from './redux/user/user.action';
 
@@ -13,7 +17,9 @@ class App extends React.PureComponent<> {
         if (this.props.isLoggedIn) {
             return (
                 <Switch>
-                    <Route path="/" exact component={Dashboard} />
+                    <Route path="/" exact component={VendorDashboard} />
+                    <Route path="/products" exact component={Products} />
+                    <Route path="/order_history" exact component={OrderHistory} />
                 </Switch>
             );
         }

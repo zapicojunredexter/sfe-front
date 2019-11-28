@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import AuthService from '../../services/auth.service';
 import Header from '../../components/header';
-import SideBar from '../../components/admin.sidebar';
+import SideBar from '../../components/vendor.sidebar';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 
@@ -16,16 +16,19 @@ class Container extends React.PureComponent<> {
             user_type: 'Vendor'
          },
          {
+            id: 2,
             first_name: 'Jacob',
             last_name: 'Thornton',
             user_type: 'Customer'
          },
          {
+            id: 3,
             first_name: 'Larry',
             last_name: 'Lee',
             user_type: 'Customer'
          },
          {
+            id: 4,
             first_name: 'Harry',
             last_name: 'Potter',
             user_type: 'Vendor'
@@ -34,7 +37,7 @@ class Container extends React.PureComponent<> {
          const columns =[{
             Header: 'Id',
             accessor: 'id',
-            width: 50,
+            width: 100,
             filterable: true
          },
          {
