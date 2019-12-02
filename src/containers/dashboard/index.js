@@ -57,8 +57,8 @@ class Container extends React.PureComponent<> {
          {
             Header: 'Actions',
             Cell: row => (
-                <div><button type="button" class="btn btn-success btn-sm">Activate</button>
-                <button type="button" class="btn btn-danger btn-sm">Deactivate</button></div>
+                <div><button type="button" className="btn btn-success btn-sm">Activate</button>
+                <button type="button" className="btn btn-danger btn-sm">Deactivate</button></div>
                 
             )
            

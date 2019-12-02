@@ -5,7 +5,10 @@ import Dashboard from './containers/dashboard';
 import VendorDashboard from './containers/vendor.dashboard';
 import Products from './containers/products';
 import OrderHistory from './containers/order.history';
-import Users from './containers/users';
+import Reviews from './containers/reviews';
+import AdminDashboard from './containers/dashboard';
+import PendingAccounts from './containers/pending.accounts';
+import AccountSettings from './containers/account.settings';
 import Login from './containers/login';
 import { setIsLoggedOut } from './redux/user/user.action';
 
@@ -20,6 +23,10 @@ class App extends React.PureComponent<> {
                     <Route path="/" exact component={VendorDashboard} />
                     <Route path="/products" exact component={Products} />
                     <Route path="/order_history" exact component={OrderHistory} />
+                    <Route path="/reviews" exact component={Reviews} />
+                    <Route path="/account_settings" exact component={AccountSettings} />
+                    <Route path="/admin_dashboard" exact component={AdminDashboard} />
+                    <Route path="/pending_accounts" exact component={PendingAccounts} />
                 </Switch>
             );
         }

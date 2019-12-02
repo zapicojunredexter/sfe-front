@@ -12,14 +12,18 @@ class Container extends React.PureComponent<> {
         
                 <div className="list-group list-group-flush">
                     <a href="#" className={this.props.currentPage=="VendorDashboard"?"list-group-item active waves-effect":"list-group-item waves-effect"}>
-                    <i class="fas fa-chart-bar mr-3"></i>Sales Report
+                    <i className="fas fa-chart-bar mr-3"></i>Sales Report
                     </a>
                     <a href="#" className={this.props.currentPage=="Products"?"list-group-item active waves-effect":"list-group-item waves-effect"}>
-                    <i class="fas fa-cubes mr-3"></i>Products
+                    <i className="fas fa-cubes mr-3"></i>Products
                     </a>
 
-                    <a href="#" className="list-group-item waves-effect">
-                    <i class="fas fa-clipboard-list mr-3"></i>Orders History
+                    <a href="#" className={this.props.currentPage=="Orders"?"list-group-item active waves-effect":"list-group-item waves-effect"}>
+                    <i className="fas fa-clipboard-list mr-3"></i>Orders History
+                    </a>
+
+                    <a href="#" className={this.props.currentPage=="Reviews"?"list-group-item active waves-effect":"list-group-item waves-effect"}>
+                    <i className="fas fa-star mr-3"></i>Reviews
                     </a>
 
                 

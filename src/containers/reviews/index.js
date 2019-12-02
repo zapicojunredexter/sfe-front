@@ -7,65 +7,70 @@ import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 
 class Container extends React.PureComponent<> {
+
     render() {
 
         const data = [{
             id: 1,
-            first_name: 'Vincent',
-            last_name: 'Otto',
-            user_type: 'Vendor'
+            customer_name: 'Lisa',
+            rating: [
+                <i class="fas fa-star" style={{color: '#FF8800'}}></i>,
+                <i class="fas fa-star" style={{color: '#FF8800'}}></i>,
+                <i class="fas fa-star" style={{color: '#FF8800'}}></i>,
+                ' When night gets dark let me be your fire'
+                ]
          },
          {
             id: 2,
-            first_name: 'Jacob',
-            last_name: 'Thornton',
-            user_type: 'Customer'
+            customer_name: 'Jennie',
+            rating:  [
+                <i class="fas fa-star" style={{color: '#FF8800'}}></i>,
+                <i class="fas fa-star" style={{color: '#FF8800'}}></i>,
+                " I said I wanted you to stay but you're always leaving"
+                ]
          },
          {
             id: 3,
-            first_name: 'Larry',
-            last_name: 'Lee',
-            user_type: 'Customer'
+            customer_name: 'Chaeyoung',
+            rating:  [
+                <i class="fas fa-star" style={{color: '#FF8800'}}></i>,
+                <i class="fas fa-star" style={{color: '#FF8800'}}></i>,
+                <i class="fas fa-star" style={{color: '#FF8800'}}></i>,
+                <i class="fas fa-star" style={{color: '#FF8800'}}></i>,
+                " So dance as if it's your laaaaast"
+                ]
          },
          {
             id: 4,
-            first_name: 'Harry',
-            last_name: 'Potter',
-            user_type: 'Vendor'
+            customer_name: 'Jisoo',
+            rating: [
+                <i class="fas fa-star" style={{color: '#FF8800'}}></i>,
+                <i class="fas fa-star" style={{color: '#FF8800'}}></i>,
+                <i class="fas fa-star" style={{color: '#FF8800'}}></i>,
+                <i class="fas fa-star" style={{color: '#FF8800'}}></i>,
+                <i class="fas fa-star" style={{color: '#FF8800'}}></i>,
+                ' Im Jisoo Im okay!'
+                ]
          }]
 
          const columns =[{
             Header: 'Id',
             accessor: 'id',
-            width: 100,
+            width: 70,
             filterable: true
+            
          },
          {
-            Header: 'First Name',
-            accessor: 'first_name',
+            Header: 'Customer Name',
+            accessor: 'customer_name',
             filterable: true
+            
          },
          {
-            Header: 'Last Name',
-            accessor: 'last_name',
+            Header: 'Rating',
+            accessor: 'rating',
             filterable: true
-         },
-         {
-            Header: 'User Type',
-            accessor: 'user_type',
-            width: 110,
-            filterable: true
-
-         },
-         {
-            Header: 'Actions',
-            Cell: row => (
-                <div><button type="button" className="btn btn-success btn-sm">Activate</button>
-                <button type="button" className="btn btn-danger btn-sm">Deactivate</button></div>
-                
-            )
-           
-         }]
+        }]
 
         return (
             <div>
@@ -73,7 +78,7 @@ class Container extends React.PureComponent<> {
                     <Header />
                 </div>
                 <SideBar
-                    currentPage = {"VendorDashboard"}
+                    currentPage = {"Reviews"}
                 />
                  <main className="pt-5 mx-lg-5" style={{minHeight: "100vh"}}>
                     <div className="container-fluid mt-5">

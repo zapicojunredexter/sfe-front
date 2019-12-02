@@ -11,8 +11,11 @@ class Container extends React.PureComponent<> {
                 </a>
         
                 <div className="list-group list-group-flush">
-                <a href="#" className="list-group-item active waves-effect">
-                    <i className="fas fa-users mr-3"></i>Users
+                <a href="#" className="list-group-item waves-effect">
+                    <i className="fas fa-users mr-3"></i>Reviews
+                </a>
+                <a href="#" className={this.props.currentPage=="PendingAccounts"?"list-group-item active waves-effect":"list-group-item waves-effect"}>
+                    <i className="fas fa-user mr-3"></i>Pending Accounts
                 </a>
                 
                 </div>

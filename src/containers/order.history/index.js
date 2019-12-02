@@ -71,7 +71,7 @@ class Container extends React.PureComponent<> {
                     <Header />
                 </div>
                 <SideBar
-                    currentPage = {"dashboard"}
+                    currentPage = {"Orders"}
                 />
                  <main className="pt-5 mx-lg-5" style={{minHeight: "100vh"}}>
                     <div className="container-fluid mt-5">

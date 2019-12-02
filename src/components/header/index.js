@@ -25,7 +25,7 @@ class Container extends React.PureComponent<> {
                         aria-haspopup="true" aria-expanded="false">
                         Admin </a>
                         <div className="dropdown-menu dropdown-menu-right dropdown-info" aria-labelledby="navbarDropdownMenuLink-4">
-                        <a className="dropdown-item" href="#"><i class="fas fa-sign-out-alt" style={{marginRight: '1em'}}></i>Logout</a>
+                        <a className="dropdown-item" href="#"><i className="fas fa-sign-out-alt" style={{marginRight: '1em'}}></i>Logout</a>
                         </div>
                     </ul>
                     

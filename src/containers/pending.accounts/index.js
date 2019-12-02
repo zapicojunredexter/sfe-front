@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import AuthService from '../../services/auth.service';
 import Header from '../../components/header';
-import SideBar from '../../components/vendor.sidebar';
+import SideBar from '../../components/admin.sidebar';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 
@@ -10,58 +10,57 @@ class Container extends React.PureComponent<> {
     render() {
 
         const data = [{
-            id: 1,
-            first_name: 'Vincent',
-            last_name: 'Otto',
-            user_type: 'Vendor'
+            store_image: '',
+            store_name: 'Store 1',
+            contact_number: '032-192231',
+            location: 'location 1'
          },
          {
-            id: 2,
-            first_name: 'Jacob',
-            last_name: 'Thornton',
-            user_type: 'Customer'
+            store_image: '',
+            store_name: 'Store 2',
+            contact_number: '224324231',
+            location: 'location 2'
          },
          {
-            id: 3,
-            first_name: 'Larry',
-            last_name: 'Lee',
-            user_type: 'Customer'
+            store_image: '',
+            store_name: 'Store 3',
+            contact_number: '123221321',
+            location: 'location 3'
          },
          {
-            id: 4,
-            first_name: 'Harry',
-            last_name: 'Potter',
-            user_type: 'Vendor'
+            store_image: '',
+            store_name: 'Store 4',
+            contact_number: '23424242',
+            location: 'location 4'
          }]
 
          const columns =[{
-            Header: 'Id',
-            accessor: 'id',
-            width: 100,
+            Header: 'Store Image',
+            accessor: 'store_image'
+            
+         },
+         {
+            Header: 'Store Name',
+            accessor: 'store_name',
+            filterable: true
+            
+         },
+         {
+            Header: 'Contact #',
+            accessor: 'contact_number',
             filterable: true
          },
          {
-            Header: 'First Name',
-            accessor: 'first_name',
-            filterable: true
-         },
-         {
-            Header: 'Last Name',
-            accessor: 'last_name',
-            filterable: true
-         },
-         {
-            Header: 'User Type',
-            accessor: 'user_type',
-            width: 110,
+            Header: 'Location',
+            accessor: 'location',
             filterable: true
 
          },
          {
             Header: 'Actions',
             Cell: row => (
-                <div><button type="button" className="btn btn-success btn-sm">Activate</button>
-                <button type="button" className="btn btn-danger btn-sm">Deactivate</button></div>
+                <div><button type="button" className="btn btn-success btn-sm">Approve</button>
+                <button type="button" className="btn btn-danger btn-sm">Decline</button></div>
                 
             )
            
@@ -73,7 +72,7 @@ class Container extends React.PureComponent<> {
                     <Header />
                 </div>
                 <SideBar
-                    currentPage = {"VendorDashboard"}
+                    currentPage = {"PendingAccounts"}
                 />
                  <main className="pt-5 mx-lg-5" style={{minHeight: "100vh"}}>
                     <div className="container-fluid mt-5">
@@ -82,7 +81,7 @@ class Container extends React.PureComponent<> {
 
                             <div className="card-body">
                                 <h4 className="mb-2 mb-sm-0 pt-1">
-                                    <span>Users</span>
+                                    <span>Pending Accounts</span>
                                 </h4>
 
                                 <ReactTable style={{marginTop: "2em"}}
