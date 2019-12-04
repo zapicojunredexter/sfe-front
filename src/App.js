@@ -9,6 +9,7 @@ import Reviews from './containers/reviews';
 import AdminDashboard from './containers/dashboard';
 import PendingAccounts from './containers/pending.accounts';
 import AccountSettings from './containers/account.settings';
+import Marketing from './containers/marketing';
 import Login from './containers/login';
 import { setIsLoggedOut } from './redux/user/user.action';
 
@@ -27,6 +28,7 @@ class App extends React.PureComponent<> {
                     <Route path="/account_settings" exact component={AccountSettings} />
                     <Route path="/admin_dashboard" exact component={AdminDashboard} />
                     <Route path="/pending_accounts" exact component={PendingAccounts} />
+                    <Route path="/marketing" exact component={Marketing} />
                 </Switch>
             );
         }

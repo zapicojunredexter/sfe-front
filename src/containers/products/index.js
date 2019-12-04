@@ -16,7 +16,7 @@ class Container extends React.PureComponent<> {
     toggleAddModal = () => 
         this.setState({
             showAddModal: !this.state.showAddModal
-        })
+    })
     
     toggleEditModal = () => 
         this.setState({

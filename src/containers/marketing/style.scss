@@ -1,0 +1,134 @@
+.navbar{
+    &__container{
+        background: tomato;
+        margin-bottom: 0 !important;
+        img{
+            max-width: 100px;
+        
+        }
+    }
+    &__link{
+        letter-spacing: 5px;
+        margin-right: 2em;
+    }
+    &__login{
+        border-left: 1px solid white;
+        .login-button{
+            margin-left: 2.7em;
+            background: transparent !important;
+            outline: none !important;
+            border: none !important;
+            letter-spacing: 5px;
+            font-weight: lighter;
+            
+        }
+    }
+}
+
+.mlogin{
+    &__container{
+        display: block;
+        padding-right: 17px;
+    }
+    &__header{
+        border-bottom: none !important;
+    }
+    &__body{
+        color: tomato;
+    }
+}
+
+.mregister{
+    &__container{
+        display: block;
+        padding-right: 17px;
+        overflow-y: auto;
+    }
+    &__header{
+        border-bottom: none !important;
+    }
+    &__body{
+        color: tomato;
+        p{
+            margin-top: 2em;
+            margin-bottom: -1em;
+            font-size: 18px;
+        }
+        .registration-requirements{
+            font-size: 12px !important;
+        }
+        ul{
+            margin-top: 2em;
+            font-size: 12px;
+            margin-bottom: 2em;
+        }
+        .terms{
+            font-size: 12px;
+            margin-left: .5em;
+        }
+    }
+}
+
+
+.homepage{
+    &__container{
+        // background-image: url("images/try.jpg");
+        // background-attachment: fixed;
+        // background-position: center;
+        // background-repeat: no-repeat;
+        // background-size: cover;
+        min-height: 90vh;
+
+    }
+    &__content{
+        text-align: center;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white;
+            .playstore-image{
+                max-width: 30%;
+            }
+            .apple-image{
+                max-width: 23.8%;
+            }
+    }
+    &__button{
+        color: white !important;
+        margin-bottom: 1em;
+    }
+   
+}
+
+.about{
+    &__container{
+        background: navajowhite;
+        min-height: 90vh;
+    }
+}
+
+.faq{
+    &__container{
+        background: grey;
+        min-height: 90vh;
+    }
+}
+
+.contact{
+    &__container{
+        background: burlywood;
+        min-height: 90vh;
+    }
+}
+
+@media only screen and (max-width: 991px){
+    .navbar{
+        &__login{
+            border-left: none;
+            a{
+                margin-left: 0;
+            }
+        }
+    }
+}
