@@ -40,15 +40,15 @@ class Container extends React.PureComponent<> {
                                     <label for="regpass2" data-error="wrong" data-success="right">Re-Type your password</label>
                                 </div>
                                 <p>Store Information</p>
-                                <div class="md-form">
+                                <div className="md-form">
                                 <input type="text" id="storename" class="form-control"/>
                                 <label for="storename">Store Name</label>
                                 </div>
-                                <div class="md-form">
+                                <div className="md-form">
                                 <input type="text" id="storelocation" class="form-control"/>
                                 <label for="storelocation">Store Location</label>
                                 </div>
-                                <div class="md-form">
+                                <div className="md-form">
                                 <textarea id="storedesc" class="md-textarea form-control" rows="3"></textarea>
                                 <label for="storedesc">Store Description</label>
                                 </div>

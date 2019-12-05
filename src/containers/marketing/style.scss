@@ -4,17 +4,20 @@
         margin-bottom: 0 !important;
         img{
             max-width: 100px;
-        
         }
     }
     &__link{
         letter-spacing: 5px;
-        margin-right: 2em;
+        margin-right: .5em;
+    }
+    
+    &__active{
+        border-bottom-style: solid;
     }
     &__login{
         border-left: 1px solid white;
         .login-button{
-            margin-left: 2.7em;
+            margin-left: 1em;
             background: transparent !important;
             outline: none !important;
             border: none !important;
@@ -72,12 +75,13 @@
 
 .homepage{
     &__container{
-        // background-image: url("images/try.jpg");
+        // background-image: url('images/try.jpg');
         // background-attachment: fixed;
         // background-position: center;
         // background-repeat: no-repeat;
         // background-size: cover;
         min-height: 90vh;
+        background: pink;
 
     }
     &__content{
@@ -94,6 +98,24 @@
                 max-width: 23.8%;
             }
     }
+    &__textcontent{
+        
+        h2{
+            font-family: "Culinary"; src: url("//db.onlinewebfonts.com/t/474c729bb9f706dac41385247d5dbc7c.eot");
+            font-size: 45px;
+            font-weight: bold;
+            margin-top: 4em;
+        }
+        p{
+            margin-top: 1em;
+            margin-bottom: 2em;
+            font-size: 16px;  
+        }
+        h6{
+            font-size: 20px;
+            margin-bottom: 1em;
+        }
+    }
     &__button{
         color: white !important;
         margin-bottom: 1em;
@@ -103,25 +125,133 @@
 
 .about{
     &__container{
-        background: navajowhite;
-        min-height: 90vh;
+        min-height: 80vh;
+        h2{
+            margin-top: 1.5em;
+            font-family: "Culinary"; src: url("//db.onlinewebfonts.com/t/474c729bb9f706dac41385247d5dbc7c.eot");
+            font-size: 60px;
+        }
+        p{
+            margin-top: -1em;
+        }
+    }
+    &__content{
+        margin-top: 3em;
+        h4{
+            font-family: "Culinary"; src: url("//db.onlinewebfonts.com/t/474c729bb9f706dac41385247d5dbc7c.eot");
+            font-size: 40px;
+            margin-top: 1em;
+        }
+        p{
+            font-size: 14px;
+            letter-spacing: 2px;
+            text-align: justify;
+            text-indent: 30px;
+            
+        }
+    }
+}
+
+.how{
+    &__container{
+        background: #eaeaea;
+        min-height: 70vh;
+        h2{
+            padding-top: 1.5em;
+            font-family: "Culinary"; src: url("//db.onlinewebfonts.com/t/474c729bb9f706dac41385247d5dbc7c.eot");
+            font-size: 60px;
+        }
+    }
+    &__content{
+       i{
+           color: tomato;
+           margin-top: 1em;
+           font-size: 3.5em;
+       }
+       p{
+           margin-top: .5em;
+           font-size: 14px;
+           letter-spacing: 1px;
+       }
     }
 }
 
 .faq{
     &__container{
-        background: grey;
-        min-height: 90vh;
+        min-height: 100vh;
+        h2{
+            padding-top: 1.5em;
+            font-family: "Culinary"; src: url("//db.onlinewebfonts.com/t/474c729bb9f706dac41385247d5dbc7c.eot");
+            font-size: 60px;
+        }
+    }
+    &__contents{
+        margin-bottom: 5em;
+        h4{
+            font-family: "Culinary"; src: url("//db.onlinewebfonts.com/t/474c729bb9f706dac41385247d5dbc7c.eot");
+            color: tomato;
+            margin-top: 1em;
+            font-size: 30px;
+        }
+        p{
+            font-size: 14px;
+            letter-spacing: 2px;
+            text-indent: 30px;
+            text-align: justify;
+        }
     }
 }
 
 .contact{
     &__container{
-        background: burlywood;
-        min-height: 90vh;
+        background: #eaeaea;
+        min-height: 110vh;
+        h2{
+            padding-top: 1.5em;
+            font-family: "Culinary"; src: url("//db.onlinewebfonts.com/t/474c729bb9f706dac41385247d5dbc7c.eot");
+            font-size: 60px;
+        }
+    }
+    &__contents{
+        margin-top: 4em;
+        .left-content{
+            max-width: 70%;
+            background: white;
+            padding: 2em;
+            margin-left: 4em;
+            -webkit-box-shadow: 9px 6px 5px 0px rgba(212,211,211,1);
+            -moz-box-shadow: 9px 6px 5px 0px rgba(212,211,211,1);
+            box-shadow: 9px 6px 5px 0px rgba(212,211,211,1);
+        }
+        .right-content{
+            margin-top: 5em;
+            h4{
+                font-weight: bolder;
+            }
+            p{
+                font-size:14px;
+            }
+            i{
+                color: tomato;
+                margin-bottom: 1em;
+                font-size: 18px;
+            }
+            a{
+                color: black;
+            }
+            span{
+                font-size: 14px;
+            }
+        }
     }
 }
 
+.footer{
+    &__container{
+        padding-left: 0 !important;
+        background: gray;
+    }
+}
 @media only screen and (max-width: 991px){
     .navbar{
         &__login{
