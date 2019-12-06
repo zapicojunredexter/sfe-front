@@ -75,13 +75,13 @@
 
 .homepage{
     &__container{
-        // background-image: url('images/try.jpg');
-        // background-attachment: fixed;
-        // background-position: center;
-        // background-repeat: no-repeat;
-        // background-size: cover;
+        background-image: url('http://localhost:3000/images/try.jpg');
+        background-attachment: fixed;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
         min-height: 90vh;
-        background: pink;
+        // background: pink;
 
     }
     &__content{
@@ -125,9 +125,14 @@
 
 .about{
     &__container{
+        background-image: url('http://localhost:3000/images/about.png');
+        background-attachment: fixed;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
         min-height: 80vh;
         h2{
-            margin-top: 1.5em;
+            padding-top: 1.5em;
             font-family: "Culinary"; src: url("//db.onlinewebfonts.com/t/474c729bb9f706dac41385247d5dbc7c.eot");
             font-size: 60px;
         }
@@ -154,7 +159,10 @@
 
 .how{
     &__container{
-        background: #eaeaea;
+        background-image: url('http://localhost:3000/images/howto.png');
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
         min-height: 70vh;
         h2{
             padding-top: 1.5em;
@@ -178,6 +186,10 @@
 
 .faq{
     &__container{
+        background-image: url('http://localhost:3000/images/faq.png');
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
         min-height: 100vh;
         h2{
             padding-top: 1.5em;
@@ -204,7 +216,10 @@
 
 .contact{
     &__container{
-        background: #eaeaea;
+        background-image: url('http://localhost:3000/images/contact.png');
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
         min-height: 110vh;
         h2{
             padding-top: 1.5em;
@@ -249,7 +264,7 @@
 .footer{
     &__container{
         padding-left: 0 !important;
-        background: gray;
+        background: #484848;
     }
 }
 @media only screen and (max-width: 991px){

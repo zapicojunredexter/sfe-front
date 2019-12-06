@@ -55,7 +55,7 @@ class Container extends React.PureComponent<> {
                 </div>
                 </nav>
 
-                <div className="homepage__container" >
+                <div className="homepage__container">
                     <div className="homepage__content">
                      <div className="homepage__textcontent">
                        <h2>Take Your First Bite Of Streetfood Express</h2>  
@@ -210,8 +210,8 @@ class Container extends React.PureComponent<> {
                    </div>
                 </div>
 
-                <footer class="page-footer footer__container">
-                    <div class="footer-copyright text-center py-3"><span>© 2020 Copyright:</span>
+                <footer className="page-footer footer__container">
+                    <div className="footer-copyright text-center py-3"><span>© 2020 Copyright:</span>
                         <a href="https://mdbootstrap.com/education/bootstrap/"> Streefoodexpress.com</a>
                     </div>
                 </footer>
