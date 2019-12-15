@@ -1,4 +1,6 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { setIsLoggedOut, setUser } from './../../redux/user/user.action';
 
 class Container extends React.PureComponent<> {
 
@@ -25,7 +27,15 @@ class Container extends React.PureComponent<> {
                         aria-haspopup="true" aria-expanded="false">
                         Admin </a>
                         <div className="dropdown-menu dropdown-menu-right dropdown-info" aria-labelledby="navbarDropdownMenuLink-4">
-                        <a className="dropdown-item" href="#"><i className="fas fa-sign-out-alt" style={{marginRight: '1em'}}></i>Logout</a>
+                            <a
+                                className="dropdown-item"
+                                onClick={() => {
+                                    this.props.setUser(null);
+                                    this.props.setIsLoggedOut();
+                                }}
+                            >
+                                <i className="fas fa-sign-out-alt" style={{marginRight: '1em'}}></i>Logout
+                            </a>
                         </div>
                     </ul>
                     
@@ -40,4 +50,16 @@ class Container extends React.PureComponent<> {
 }
 
 
-export default(Container);
+
+const mapStateToProps = state => ({});
+
+const mapDispatchToProps = dispatch => ({
+    setIsLoggedOut: () => dispatch(setIsLoggedOut()),
+    setUser: () => dispatch(setUser()),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Container);
+

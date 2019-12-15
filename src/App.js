@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Switch, Route, Redirect } from "react-router-dom";
-import Dashboard from './containers/dashboard';
 import VendorDashboard from './containers/vendor.dashboard';
 import Products from './containers/products';
 import OrderHistory from './containers/order.history';
@@ -10,10 +9,12 @@ import AdminDashboard from './containers/dashboard';
 import PendingAccounts from './containers/pending.accounts';
 import AccountSettings from './containers/account.settings';
 import Marketing from './containers/marketing';
-import Login from './containers/login';
 import { setIsLoggedOut } from './redux/user/user.action';
+import FirebaseService from './services/firebase.service';
 
 import './App.css';
+
+FirebaseService();
 
 class App extends React.PureComponent<> {
 
@@ -28,7 +29,6 @@ class App extends React.PureComponent<> {
                     <Route path="/account_settings" exact component={AccountSettings} />
                     <Route path="/admin_dashboard" exact component={AdminDashboard} />
                     <Route path="/pending_accounts" exact component={PendingAccounts} />
-                    <Route path="/marketing" exact component={Marketing} />
                 </Switch>
             );
         }
@@ -44,13 +44,13 @@ class App extends React.PureComponent<> {
 
     loginRoute = () => {
         if (this.props.isLoggedIn === false) {
-            return <Route path="/login" component={Login} />;
+            return <Route path="/login" exact component={Marketing} />;
         }
-
+        const isAdmin = false;
         return (
             <Redirect
                 to={{
-                    pathname: '/',
+                    pathname: isAdmin ? 'admin_dashboard' : '/',
                 }}
             />
         );

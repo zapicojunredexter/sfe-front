@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import AuthService from '../../services/auth.service';
+import UserService from '../../services/user.service';
+import { setUser, setIsLoggedIn } from '../../redux/user/user.action';
 import LoginModal from './modals/login';
 import RegisterModal from './modals/registration';
 import './style.scss'
@@ -10,15 +12,48 @@ class Container extends React.PureComponent<> {
         show: false
     }
 
+    componentDidMount(){
+        // this.login('store','store');
+        this.checkLocalStorage();
+    }
+
+    checkLocalStorage = () => {
+        const userStr = localStorage.getItem('user');
+        if(userStr) {
+            const userObj = JSON.parse(userStr);
+            if(userObj.username && userObj.password) {
+                this.login(userObj.username, userObj.password);
+            }
+        }
+    }
+
     toggleLoginModal = () => 
         this.setState({
             showLoginModal: !this.state.showLoginModal
-    })
+        })
 
     toggleRegisterModal = () => 
-    this.setState({
-        showRegisterModal: !this.state.RegisterLoginModal
-})
+        this.setState({
+            showRegisterModal: !this.state.RegisterLoginModal
+        });
+
+    login = (username, password) => {
+        UserService.login(username, password)
+            .then((user) => {
+                localStorage.setItem('user', JSON.stringify(user));
+                this.props.setUser(user);
+                this.props.setIsLoggedIn();
+            })
+            .catch(err => alert(err.message));
+    }
+
+    register = (user, store) => {
+        UserService.registerStore(user, store)
+            .then(() => {
+                alert('success');
+            })
+            .catch(err => alert(err.message));
+    }
     
 
     render() {
@@ -49,7 +84,7 @@ class Container extends React.PureComponent<> {
                     </li>
                     <li className="nav-item navbar__link navbar__login">
                         <button className="nav-link login-button" type="button" onClick = {e => { this.toggleLoginModal(); }}>Login</button>
-                        <LoginModal onClose={this.showLoginModal} show={this.state.showLoginModal}/>
+                        <LoginModal onSubmit={this.login} onClose={this.toggleLoginModal} show={this.state.showLoginModal}/>
                     </li>
                     </ul>
                 </div>
@@ -67,7 +102,7 @@ class Container extends React.PureComponent<> {
                       <a href="https://play.google.com/store?hl=en" target="_blank"><img src="images/playstore.png" className="playstore-image"/> </a>
                       <a href="https://www.apple.com/ios/app-store/" target="_blank"><img src="images/applestore.png" className="apple-image"/></a>
                     </div>
-                    <RegisterModal onClose={this.showRegisterModal} show={this.state.showRegisterModal}/>
+                    <RegisterModal onSubmit={this.register} onClose={this.showRegisterModal} show={this.state.showRegisterModal}/>
                     
                 </div>
 
@@ -222,10 +257,13 @@ class Container extends React.PureComponent<> {
 }
 
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+});
 
 const mapDispatchToProps = dispatch => ({
     logout: () => dispatch(AuthService.logout()),
+    setUser: user => dispatch(setUser(user)),
+    setIsLoggedIn: () => dispatch(setIsLoggedIn()),
 });
 
 export default connect(

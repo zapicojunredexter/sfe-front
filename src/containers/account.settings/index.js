@@ -6,7 +6,6 @@ import SideBar from '../../components/vendor.sidebar';
 
 class Container extends React.PureComponent<> {
     render() {
-
         return (
             <div>
                 <div>

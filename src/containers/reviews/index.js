@@ -5,8 +5,50 @@ import Header from '../../components/header';
 import SideBar from '../../components/vendor.sidebar';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
+import ReviewsService from '../../services/reviews.service';
+
+const columns = [
+    {
+        Header: 'Id',
+        accessor: 'id',
+        width: 70,
+        filterable: true
+        
+    },
+    {
+        Header: 'Customer Name',
+        accessor: 'customer_name',
+        filterable: true
+        
+    },
+    {
+        Header: 'Rating',
+        accessor: 'rating',
+        filterable: true
+    }
+];
 
 class Container extends React.PureComponent<> {
+    listener = null;
+
+    state = {
+        reviews: [],
+    };
+    componentDidMount(){
+        this.closeListener();
+        this.listener = ReviewsService.createStoreReviewsListener(this.props.userId, (data) => {
+            this.setState({reviews: data});
+        });
+    }
+    componentWillUnmount(){
+        this.closeListener();
+    }
+
+    closeListener = () => {
+        if(this.listener){
+            this.listener();
+        }
+    }
 
     render() {
 
@@ -51,26 +93,7 @@ class Container extends React.PureComponent<> {
                 <i class="fas fa-star" style={{color: '#FF8800'}}></i>,
                 ' Im Jisoo Im okay!'
                 ]
-         }]
-
-         const columns =[{
-            Header: 'Id',
-            accessor: 'id',
-            width: 70,
-            filterable: true
-            
-         },
-         {
-            Header: 'Customer Name',
-            accessor: 'customer_name',
-            filterable: true
-            
-         },
-         {
-            Header: 'Rating',
-            accessor: 'rating',
-            filterable: true
-        }]
+         }];
 
         return (
             <div>
@@ -109,7 +132,9 @@ class Container extends React.PureComponent<> {
 }
 
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+    userId: state.userStore.user && state.userStore.user.id,
+});
 
 const mapDispatchToProps = dispatch => ({
     logout: () => dispatch(AuthService.logout()),

@@ -3,6 +3,11 @@
 import React from 'react';
 
 class Container extends React.PureComponent<> {
+
+    state = {
+        username: '',
+        password: '',
+    };
     onClose = e => {
         this.props.onClose && this.props.onClose(e)
     }
@@ -28,19 +33,27 @@ class Container extends React.PureComponent<> {
                         <h4 className="text-center"><i className="fa fa-user prefix"></i>Login</h4>
                         <div className="md-form">
                             <i className="fas fa-envelope prefix"></i>
-                            <input type="text" id="loginemailadd" className="form-control" />
+                            <input value={this.state.username} onChange={e => this.setState({username: e.target.value})} type="text" id="loginemailadd" className="form-control" />
                             <label for="loginemailadd">E-mail address</label>
                         </div>
                         <div className="md-form">
                             <i className="fas fa-lock prefix"></i>
-                            <input type="password" id="loginpass" className="form-control validate" />
+                            <input value={this.state.password} onChange={e => this.setState({password: e.target.value})} type="password" id="loginpass" className="form-control validate" />
                             <label for="loginpass" data-error="wrong" data-success="right">Type your password</label>
                         </div>
 
                     </div>
                     <div className="modal-footer">
                         <button onClick = {e => {this.onClose(e); }} type="button" className="btn btn-danger btn-sm waves-effect waves-light" data-dismiss="modal">Close</button>
-                        <button type="button" className="btn btn-primary btn-sm waves-effect waves-light">Save changes</button>
+                        <button
+                            type="button"
+                            className="btn btn-primary btn-sm waves-effect waves-light"
+                            onClick={() => {
+                                this.props.onSubmit(this.state.username, this.state.password);
+                            }}
+                        >
+                            Save changes
+                        </button>
                     </div>
                     </div>
                 </div>

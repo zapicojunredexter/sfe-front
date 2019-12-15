@@ -3,8 +3,21 @@
 import React from 'react';
 
 class Container extends React.PureComponent<> {
+
+    state = {
+        username: '',
+        password: '',
+        name: '',
+        description: '',
+        location: '',
+    };
+
     onClose = e => {
         this.props.onClose && this.props.onClose(e)
+    }
+
+    handleChange = (key, value) => {
+        this.setState({[key]: value});
     }
 
     render() {
@@ -28,28 +41,28 @@ class Container extends React.PureComponent<> {
                             <div className="container">
                                 <p>Login Information</p>
                                 <div className="md-form">
-                                <input type="text" id="regemailadd" className="form-control" />
+                                <input value={this.state.username} onChange={e => this.handleChange('username', e.target.value)} type="text" id="regemailadd" className="form-control" />
                                 <label for="regemailadd">E-mail address</label>
                                 </div>
                                 <div className="md-form">
-                                    <input type="password" id="regpass" className="form-control validate" />
+                                    <input value={this.state.password} onChange={e => this.handleChange('password', e.target.value)} type="password" id="regpass" className="form-control validate" />
                                     <label for="regpass" data-error="wrong" data-success="right">Type your password</label>
                                 </div>
                                 <div className="md-form">
-                                    <input type="password" id="regpass2" className="form-control validate" />
+                                    <input value={this.state.password} onChange={e => this.handleChange('password', e.target.value)} type="password" id="regpass2" className="form-control validate" />
                                     <label for="regpass2" data-error="wrong" data-success="right">Re-Type your password</label>
                                 </div>
                                 <p>Store Information</p>
                                 <div className="md-form">
-                                <input type="text" id="storename" class="form-control"/>
+                                <input value={this.state.name} onChange={e => this.handleChange('name', e.target.value)} type="text" id="storename" class="form-control"/>
                                 <label for="storename">Store Name</label>
                                 </div>
                                 <div className="md-form">
-                                <input type="text" id="storelocation" class="form-control"/>
+                                <input value={this.state.location} onChange={e => this.handleChange('location', e.target.value)} type="text" id="storelocation" class="form-control"/>
                                 <label for="storelocation">Store Location</label>
                                 </div>
                                 <div className="md-form">
-                                <textarea id="storedesc" class="md-textarea form-control" rows="3"></textarea>
+                                <textarea value={this.state.description} onChange={e => this.handleChange('description', e.target.value)} id="storedesc" class="md-textarea form-control" rows="3"></textarea>
                                 <label for="storedesc">Store Description</label>
                                 </div>
                                 <p className="registration-requirements">Also, kindly send to <a className="text-info">streetfoodexpresscares@gmail.com</a> the list of requirments written below for the approval of your store.</p>
@@ -65,7 +78,22 @@ class Container extends React.PureComponent<> {
                         </div>
                     <div className="modal-footer">
                         <button onClick = {e => {this.onClose(e); }} type="button" className="btn btn-danger btn-sm waves-effect waves-light" data-dismiss="modal">Close</button>
-                        <button type="button" className="btn btn-primary btn-sm waves-effect waves-light">Register</button>
+                        <button
+                            type="button"
+                            className="btn btn-primary btn-sm waves-effect waves-light"
+                            onClick={() => {
+                                const user = {
+                                    username: this.state.username,
+                                    password: this.state.password,
+                                };
+                                const store = {
+                                    name: this.state.name,
+                                    description: this.state.description,
+                                    location: this.state.location
+                                };
+                                this.props.onSubmit(user, store);
+                            }}
+                        >Register</button>
                     </div>
                     </div>
                 </div>

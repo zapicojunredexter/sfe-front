@@ -4,11 +4,60 @@ import AuthService from '../../services/auth.service';
 import Header from '../../components/header';
 import SideBar from '../../components/vendor.sidebar';
 import ReactTable from 'react-table';
+import OrderService from '../../services/orders.service';
 import 'react-table/react-table.css';
 
-class Container extends React.PureComponent<> {
-    render() {
 
+const columns =[
+    {
+        Header: 'Id',
+        accessor: 'id',
+        width: 100,
+        filterable: true
+    },
+    {
+        Header: 'First Name',
+        accessor: 'first_name',
+        filterable: true
+    },
+    {
+        Header: 'Last Name',
+        accessor: 'last_name',
+        filterable: true
+    },
+    {
+        Header: 'Ordered Product/s',
+        accessor: 'ordered_products',
+        filterable: true
+    },
+    {
+        Header: 'Quantity',
+        accessor: 'quantity',
+        width: 110
+    }
+];
+class Container extends React.PureComponent<> {
+    listener = null;
+
+    state = {
+        orders: []
+    };
+    componentDidMount(){
+        this.closeListener();
+        this.listener = OrderService.createStoreListener(this.props.userId, (data) => {
+            this.setState({orders: data});
+        });
+    }
+    componentWillUnmount(){
+        this.closeListener();
+    }
+
+    closeListener = () => {
+        if(this.listener){
+            this.listener();
+        }
+    }
+    render() {
         const data = [{
             id: 1,
             first_name: 'Vincent',
@@ -36,34 +85,7 @@ class Container extends React.PureComponent<> {
             last_name: 'Potter',
             ordered_products: 'Fish Ball',
             quantity: '1 pack'
-         }]
-
-         const columns =[{
-            Header: 'Id',
-            accessor: 'id',
-            width: 100,
-            filterable: true
-         },
-         {
-            Header: 'First Name',
-            accessor: 'first_name',
-            filterable: true
-         },
-         {
-            Header: 'Last Name',
-            accessor: 'last_name',
-            filterable: true
-         },
-         {
-            Header: 'Ordered Product/s',
-            accessor: 'ordered_products',
-            filterable: true
-         },
-         {
-            Header: 'Quantity',
-            accessor: 'quantity',
-            width: 110
-         }]
+         }];
 
         return (
             <div>
@@ -102,7 +124,9 @@ class Container extends React.PureComponent<> {
 }
 
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+    userId: state.userStore.user && state.userStore.user.id,
+});
 
 const mapDispatchToProps = dispatch => ({
     logout: () => dispatch(AuthService.logout()),

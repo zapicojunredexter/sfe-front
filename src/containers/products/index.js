@@ -8,11 +8,31 @@ import EditModal from './modals/editmodal';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import SweetAlert from 'sweetalert2-react';
+import ProductService from '../../services/products.service';
 
 class Container extends React.PureComponent<> {
+    listener = null;
+
     state = {
+        products: [],
         show: false
+    };
+    componentDidMount(){
+        this.closeListener();
+        this.listener = ProductService.createStoreProductsListener(this.props.userId, (data) => {
+            this.setState({products: data});
+        });
     }
+    componentWillUnmount(){
+        this.closeListener();
+    }
+
+    closeListener = () => {
+        if(this.listener){
+            this.listener();
+        }
+    }
+
     toggleAddModal = () => 
         this.setState({
             showAddModal: !this.state.showAddModal
@@ -65,6 +85,7 @@ class Container extends React.PureComponent<> {
             Header: 'Image',
             accessor: 'image',
             filterable: true,
+            Cell: () => <img src="https://mdbootstrap.com/img/logo/mdb-email.png" className="img-fluid" alt="" style={{maxWidth: "120px"}} />,
             width: 180
 
          },
@@ -81,7 +102,7 @@ class Container extends React.PureComponent<> {
          },
          {
             Header: 'Quantity',
-            accessor: 'quantity',
+            accessor: 'stockQty',
             width: 100,
             filterable: true
 
@@ -103,8 +124,7 @@ class Container extends React.PureComponent<> {
                 </div>
                 
             )
-           
-         }]
+         }];
 
         return (
             <div>
@@ -128,17 +148,47 @@ class Container extends React.PureComponent<> {
                                     }} type="button" className="btn btn-info btn-sm"  style={{marginLeft: '1.5em'}}><i className="fas fa-plus mr-2"></i>Add Product</button>
                                 </h4>
 
-                               <AddModal onClose={this.showAddModal} show={this.state.showAddModal}/>
-                               <EditModal onClose={this.showEditModal} show={this.state.showEditModal} />
+                               <AddModal
+                                    onClose={this.toggleAddModal}
+                                    show={this.state.showAddModal}
+                                    onSubmit={payload => {
+                                        const updatedPayload = {
+                                            ...payload,
+                                            store: this.props.user
+                                        };
+                                        this.props.addProduct(updatedPayload)
+                                            .then(() => {
+                                                alert('successfully added');
+                                            })
+                                            .catch(err => {
+                                                alert(err.message);
+                                            });
+                                    }}
+                                />
+                               <EditModal
+                                    onClose={this.toggleEditModal}
+                                    show={this.state.showEditModal}
+                                    onSubmit={payload => {
+                                        const updatedPayload = {
+                                            ...payload,
+                                        };
+                                        this.props.addProduct(updatedPayload)
+                                            .then(() => {
+                                                alert('successfully updated');
+                                            })
+                                            .catch(err => {
+                                                alert(err.message);
+                                            });
+                                    }}
+                                />
 
                                <ReactTable style={{marginTop: "2em"}}
-                                    data = {data}
+                                    data = {this.state.products}
                                     columns = {columns}
                                     defaultPageSize = {10}
                                     pageSizeOptions = {[10,30,50]}
                                     minRows = {1}
                                 />
-
                             </div>
 
                         </div>
@@ -150,10 +200,14 @@ class Container extends React.PureComponent<> {
 }
 
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+    userId: state.userStore.user && state.userStore.user.id,
+    user: state.userStore.user,
+});
 
 const mapDispatchToProps = dispatch => ({
     logout: () => dispatch(AuthService.logout()),
+    addProduct: payload => dispatch(ProductService.add(payload)),
 });
 
 export default connect(
