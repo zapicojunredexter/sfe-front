@@ -45,6 +45,11 @@ export default class Service {
         return data;
     }
 
+    static find = async (docId) => {
+        const data = await Service.collection().doc(docId).get().then(res => ({id: res.id, ...res.data()}));
+        return data;
+    }
+
     static createListener = (callback = () => {}, query) => {
         return Service.collection().onSnapshot((result) => {
             const data = result.docs.map(data => ({id: data.id, ...data.data()}));

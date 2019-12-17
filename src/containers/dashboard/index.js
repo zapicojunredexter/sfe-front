@@ -78,18 +78,6 @@ class Container extends React.PureComponent<> {
                         <div className="card mb-4 wow fadeIn">
 
                             <div className="card-body">
-                                <h4 className="mb-2 mb-sm-0 pt-1">
-                                    <span>Users</span>
-                                </h4>
-
-                                <ReactTable style={{marginTop: "2em"}}
-                                    data = {data}
-                                    columns = {columns}
-                                    defaultPageSize = {10}
-                                    pageSizeOptions = {[10,30,50]}
-                                    minRows = {1}
-                                />
-
                             </div>
 
                         </div>

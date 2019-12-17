@@ -45,13 +45,16 @@ class Container extends React.PureComponent<> {
                                 <label for="regemailadd">E-mail address</label>
                                 </div>
                                 <div className="md-form">
-                                    <input value={this.state.password} onChange={e => this.handleChange('password', e.target.value)} type="password" id="regpass" className="form-control validate" />
-                                    <label for="regpass" data-error="wrong" data-success="right">Type your password</label>
+                                    <input value={this.state.password} onChange={e => this.handleChange('password', e.target.value)} type="password" id="regpass" className="form-control" />
+                                    <label for="regpass">Type your password</label>
                                 </div>
+                                {/*
                                 <div className="md-form">
-                                    <input value={this.state.password} onChange={e => this.handleChange('password', e.target.value)} type="password" id="regpass2" className="form-control validate" />
-                                    <label for="regpass2" data-error="wrong" data-success="right">Re-Type your password</label>
+                                    <input value={this.state.password} onChange={e => this.handleChange('password', e.target.value)} type="password" id="regpass2" className="form-control" />
+                                    <label for="regpass2">Re-Type your password</label>
                                 </div>
+                                */}
+                                
                                 <p>Store Information</p>
                                 <div className="md-form">
                                 <input value={this.state.name} onChange={e => this.handleChange('name', e.target.value)} type="text" id="storename" class="form-control"/>
@@ -89,7 +92,52 @@ class Container extends React.PureComponent<> {
                                 const store = {
                                     name: this.state.name,
                                     description: this.state.description,
-                                    location: this.state.location
+                                    address: this.state.location,
+                                    deliveryFee: 0,
+                                    operatingHours: {
+                                        Monday: {
+                                            key: 'Monday',
+                                            from: '00:00',
+                                            to: '00:00',
+                                            closed: true,
+                                        },
+                                        Tuesday: {
+                                            key: 'Tuesday',
+                                            from: '00:00',
+                                            to: '00:00',
+                                            closed: true,
+                                        },
+                                        Wednesday: {
+                                            key: 'Wednesday',
+                                            from: '00:00',
+                                            to: '00:00',
+                                            closed: true,
+                                        },
+                                        Thursday: {
+                                            key: 'Thursday',
+                                            from: '00:00',
+                                            to: '00:00',
+                                            closed: true,
+                                        },
+                                        Friday: {
+                                            key: 'Friday',
+                                            from: '00:00',
+                                            to: '00:00',
+                                            closed: true,
+                                        },
+                                        Saturday: {
+                                            key: 'Saturday',
+                                            from: '00:00',
+                                            to: '00:00',
+                                            closed: true,
+                                        },
+                                        Sunday: {
+                                            key: 'Sunday',
+                                            from: '00:00',
+                                            to: '00:00',
+                                            closed: true,
+                                        },
+                                    },
                                 };
                                 this.props.onSubmit(user, store);
                             }}

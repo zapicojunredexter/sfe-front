@@ -48,6 +48,11 @@ export default class Service {
         return data;
     }
 
+    static find = async (docId) => {
+        const data = await Service.collection().doc(docId).get().then(res => ({id: res.id, ...res.data()}));
+        return data;
+    }
+
     static createListener = (callback = () => {}, query) => {
         return Service.collection().onSnapshot((result) => {
             const data = result.docs.map(data => ({id: data.id, ...data.data()}));
@@ -95,10 +100,11 @@ export default class Service {
                 return {
                     username,
                     password,
-                    type: 'admin'
+                    type: 'admin',
+                    name: 'admin',
                 };
             }
-            const user = await Service.collection()
+            const authUser = await Service.collection()
                 .where('username', '==', username)
                 .get()
                 .then(results => {
@@ -108,13 +114,14 @@ export default class Service {
                     const data = results.docs.map(res => ({id: res.id, ...res.data()}));
                     return data[0];
                 });
-            if(user.type === 'customer'){
+            if(authUser.type === 'customer'){
                 throw new Error('Invalid account');
             }
-            if(user.password !== password) {
+            if(authUser.password !== password) {
                 throw new Error('Wrong password');
             }
-            return user;
+            const userObj = await StoreService.find(authUser.id);
+            return {...userObj,...authUser};
         } catch(err) {
             throw err;
         }

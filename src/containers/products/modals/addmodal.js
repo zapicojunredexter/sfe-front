@@ -6,6 +6,7 @@ class Container extends React.PureComponent<> {
         description: '',
         stockQty: '',
         serving: '',
+        price: '',
     };
 
     handleChange = (key, value) => {
@@ -55,6 +56,10 @@ class Container extends React.PureComponent<> {
                                     <label for="productQty">Stock Quantity</label>
                                 </div>
                                 <div className="md-form">
+                                    <input value={this.state.price} onChange={ev => this.handleChange('price',ev.target.value)} type="number" id="price" className="form-control"/>
+                                    <label for="price">Price</label>
+                                </div>
+                                <div className="md-form">
                                     <input value={this.state.serving} onChange={ev => this.handleChange('serving',ev.target.value)} type="text" id="stockType" className="form-control" placeholder="Ex: boxes/pieces/packs"/>
                                     <label for="stockType" className="active">Stock Type</label>
                                 </div>
@@ -68,7 +73,8 @@ class Container extends React.PureComponent<> {
                                     const payload = {
                                         name: this.state.name,
                                         description: this.state.description,
-                                        stockQty: this.state.stockQty,
+                                        stockQty: Number(this.state.stockQty),
+                                        price: Number(this.state.price),
                                         serving: this.state.serving,
                                     };
                                     this.props.onSubmit(payload);

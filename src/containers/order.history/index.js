@@ -7,35 +7,6 @@ import ReactTable from 'react-table';
 import OrderService from '../../services/orders.service';
 import 'react-table/react-table.css';
 
-
-const columns =[
-    {
-        Header: 'Id',
-        accessor: 'id',
-        width: 100,
-        filterable: true
-    },
-    {
-        Header: 'First Name',
-        accessor: 'first_name',
-        filterable: true
-    },
-    {
-        Header: 'Last Name',
-        accessor: 'last_name',
-        filterable: true
-    },
-    {
-        Header: 'Ordered Product/s',
-        accessor: 'ordered_products',
-        filterable: true
-    },
-    {
-        Header: 'Quantity',
-        accessor: 'quantity',
-        width: 110
-    }
-];
 class Container extends React.PureComponent<> {
     listener = null;
 
@@ -57,35 +28,75 @@ class Container extends React.PureComponent<> {
             this.listener();
         }
     }
+    updateOrderStatus = (orderId, status) => {
+        const payload = {
+            status,
+        };
+        OrderService.update(orderId, payload)()
+            .then(() => {
+                alert('successfully updated');
+            })
+            .catch(err => {
+                alert(err.message);
+            })
+    }
     render() {
-        const data = [{
-            id: 1,
-            first_name: 'Vincent',
-            last_name: 'Otto',
-            ordered_products: 'Hawaiian Pizza',
-            quantity: '5 boxes'
-         },
-         {
-            id: 2,
-            first_name: 'Jacob',
-            last_name: 'Thornton',
-            ordered_products: 'Siomai',
-            quantity: '1 pack'
-         },
-         {
-            id: 3,
-            first_name: 'Larry',
-            last_name: 'Lee',
-            ordered_products: 'Lumpia Shanghai',
-            quantity: '25 pieces'
-         },
-         {
-            id: 4,
-            first_name: 'Harry',
-            last_name: 'Potter',
-            ordered_products: 'Fish Ball',
-            quantity: '1 pack'
-         }];
+        const columns =[
+            {
+                Header: 'Id',
+                accessor: 'id',
+                // width: 100,
+                filterable: true
+            },
+            {
+                Header: 'Customer Name',
+                accessor: (row) => row.customer.name,
+                id: 'testing',
+                filterable: true
+            },
+            {
+                Header: 'Ordered Product/s',
+                accessor: 'carts',
+                filterable: true
+            },
+            {
+                Header: 'Quantity',
+                accessor: 'stockQty',
+                // width: 110
+            },
+            {
+                Header: 'Status',
+                accessor: 'status',
+                // width: 110
+            },
+            {
+                Header: 'Actions',
+                accessor: '',
+                Cell: ({original}) => {
+                    const statuses = ['waiting', 'accepted','rejected','delivery', 'delivered'];
+                    const canAcceptReject = original.status && original.status === 'waiting';
+                    const canBeDelivered = original.status && original.status === 'accepted';
+                    return (
+                        <span>
+                            {canAcceptReject && (
+                                <>
+                                <button onClick={() => this.updateOrderStatus(original.id, 'accepted')}>
+                                    accept
+                                </button>
+                                <button onClick={() => this.updateOrderStatus(original.id, 'rejected')}>
+                                    reject
+                                </button>
+                                </>
+                            )}
+                            {canBeDelivered && (
+                                <button onClick={() => this.updateOrderStatus(original.id, 'delivery')}>start delivery</button>
+                            )}
+                        </span>
+                    );
+                },
+                // width: 110
+            },
+        ];
 
         return (
             <div>
@@ -106,7 +117,7 @@ class Container extends React.PureComponent<> {
                                 </h4>
 
                                 <ReactTable style={{marginTop: "2em"}}
-                                    data = {data}
+                                    data = {this.state.orders}
                                     columns = {columns}
                                     defaultPageSize = {10}
                                     pageSizeOptions = {[10,30,50]}

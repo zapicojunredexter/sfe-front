@@ -20,15 +20,15 @@ class App extends React.PureComponent<> {
 
     protectedRoute = props => {
         if (this.props.isLoggedIn) {
+            const isAdmin = this.props.userType === 'admin';
             return (
                 <Switch>
-                    <Route path="/" exact component={VendorDashboard} />
                     <Route path="/products" exact component={Products} />
                     <Route path="/order_history" exact component={OrderHistory} />
                     <Route path="/reviews" exact component={Reviews} />
                     <Route path="/account_settings" exact component={AccountSettings} />
-                    <Route path="/admin_dashboard" exact component={AdminDashboard} />
                     <Route path="/pending_accounts" exact component={PendingAccounts} />
+                    <Route path="/" component={isAdmin ? AdminDashboard : VendorDashboard} />
                 </Switch>
             );
         }
@@ -42,15 +42,32 @@ class App extends React.PureComponent<> {
         );
     };
 
-    loginRoute = () => {
+    loginRoute = (props) => {
+        const fromUrl = props && props.location && props.location.state && props.location.state.from && props.location.state.from.pathname;
+        
         if (this.props.isLoggedIn === false) {
             return <Route path="/login" exact component={Marketing} />;
         }
-        const isAdmin = false;
+        const isAdmin = this.props.userType === 'admin';
+        const redirectUrl = () => {
+            const validUrls = {
+                store: {
+                    '/products': '/products',
+                    '/reviews': '/reviews',
+                    '/order_history': '/order_history',
+                    '/account_settings': '/account_settings',
+                },
+                admin: {
+                    '/pending_accounts': '/pending_accounts'
+                }
+            }
+            console.log('mao nis ha', this.props.userType, validUrls[this.props.userType][fromUrl], fromUrl);
+            return (this.props.userType && validUrls[this.props.userType] && validUrls[this.props.userType][fromUrl]) || '/';
+        };
         return (
             <Redirect
                 to={{
-                    pathname: isAdmin ? 'admin_dashboard' : '/',
+                    pathname: redirectUrl(),
                 }}
             />
         );
@@ -68,6 +85,7 @@ class App extends React.PureComponent<> {
 
 
 const mapStateToProps = state => ({
+    userType: state.userStore.user && state.userStore.user.type,
     isLoggedIn: state.userStore.isLoggedIn
 });
 

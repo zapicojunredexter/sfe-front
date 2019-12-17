@@ -39,7 +39,7 @@ class Container extends React.PureComponent<> {
                         <div className="md-form">
                             <i className="fas fa-lock prefix"></i>
                             <input value={this.state.password} onChange={e => this.setState({password: e.target.value})} type="password" id="loginpass" className="form-control validate" />
-                            <label for="loginpass" data-error="wrong" data-success="right">Type your password</label>
+                            <label for="loginpass">Type your password</label>
                         </div>
 
                     </div>

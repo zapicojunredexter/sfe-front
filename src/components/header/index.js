@@ -1,10 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
+
+import { Link } from 'react-router-dom';
+
 import { setIsLoggedOut, setUser } from './../../redux/user/user.action';
 
 class Container extends React.PureComponent<> {
 
     render() {
+        const { user } = this.props;
         return (
             <header>
                 <nav className="navbar fixed-top navbar-expand-lg navbar-light white scrolling-navbar">
@@ -25,8 +29,12 @@ class Container extends React.PureComponent<> {
                     <ul className="navbar-nav nav-flex-icons">
                         <a className="nav-link dropdown-toggle" id="navbarDropdownMenuLink-4" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
-                        Admin </a>
+                        {user && user.name} </a>
                         <div className="dropdown-menu dropdown-menu-right dropdown-info" aria-labelledby="navbarDropdownMenuLink-4">
+                            
+                            <Link to="account_settings" className="dropdown-item">
+                                <i className="fas fa-users mr-3"></i>Account Settings
+                            </Link>
                             <a
                                 className="dropdown-item"
                                 onClick={() => {
@@ -51,7 +59,9 @@ class Container extends React.PureComponent<> {
 
 
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+    user: state.userStore.user,
+});
 
 const mapDispatchToProps = dispatch => ({
     setIsLoggedOut: () => dispatch(setIsLoggedOut()),

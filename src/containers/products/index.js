@@ -158,6 +158,7 @@ class Container extends React.PureComponent<> {
                                         };
                                         this.props.addProduct(updatedPayload)
                                             .then(() => {
+                                                this.toggleAddModal();
                                                 alert('successfully added');
                                             })
                                             .catch(err => {

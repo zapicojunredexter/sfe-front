@@ -4,9 +4,30 @@ import AuthService from '../../services/auth.service';
 import Header from '../../components/header';
 import SideBar from '../../components/admin.sidebar';
 import ReactTable from 'react-table';
+import UserService from '../../services/user.service';
 import 'react-table/react-table.css';
 
 class Container extends React.PureComponent<> {
+    listener = null;
+
+    state = {
+        users: [],
+    };
+    componentDidMount(){
+        this.closeListener();
+        this.listener = UserService.createListener((data) => {
+            this.setState({users: data});
+        });
+    }
+    componentWillUnmount(){
+        this.closeListener();
+    }
+
+    closeListener = () => {
+        if(this.listener){
+            this.listener();
+        }
+    }
     render() {
 
         const data = [{
@@ -64,7 +85,8 @@ class Container extends React.PureComponent<> {
                 
             )
            
-         }]
+         }];
+         console.log('tuara man', this.state.users);
 
         return (
             <div>
