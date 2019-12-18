@@ -57,11 +57,18 @@ class Container extends React.PureComponent<> {
             {
                 Header: 'Ordered Product/s',
                 accessor: 'carts',
+
+                Cell: ({original}) => {
+                return <span>{original.cart.map(car => car.itemName)}</span>
+                },
                 filterable: true
             },
             {
-                Header: 'Quantity',
+                Header: 'Number of Items',
                 accessor: 'stockQty',
+                Cell: ({original}) => {
+                    return <span>{original.cart.length}</span>
+                },
                 // width: 110
             },
             {
@@ -74,8 +81,10 @@ class Container extends React.PureComponent<> {
                 accessor: '',
                 Cell: ({original}) => {
                     const statuses = ['waiting', 'accepted','rejected','delivery', 'delivered'];
+                    // ['cancelled','waiting', 'accepted','rejected','delivery', 'delivered']
                     const canAcceptReject = original.status && original.status === 'waiting';
                     const canBeDelivered = original.status && original.status === 'accepted';
+                    const canBeFinished = original.status && original.status === 'delivery';
                     return (
                         <span>
                             {canAcceptReject && (
@@ -90,6 +99,9 @@ class Container extends React.PureComponent<> {
                             )}
                             {canBeDelivered && (
                                 <button onClick={() => this.updateOrderStatus(original.id, 'delivery')}>start delivery</button>
+                            )}
+                            {canBeFinished && (
+                                <button onClick={() => this.updateOrderStatus(original.id, 'delivered')}>finish transaction</button>    
                             )}
                         </span>
                     );

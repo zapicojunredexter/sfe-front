@@ -85,7 +85,7 @@ class Container extends React.PureComponent<> {
             Header: 'Image',
             accessor: 'image',
             filterable: true,
-            Cell: () => <img src="https://mdbootstrap.com/img/logo/mdb-email.png" className="img-fluid" alt="" style={{maxWidth: "120px"}} />,
+            Cell: ({original}) => <img src={original.imgUrl} className="img-fluid" alt="" style={{maxWidth: "120px"}} />,
             width: 180
 
          },
@@ -103,7 +103,14 @@ class Container extends React.PureComponent<> {
          {
             Header: 'Quantity',
             accessor: 'stockQty',
-            width: 100,
+            // width: 100,
+            filterable: true
+
+         },
+         {
+            Header: 'Price',
+            accessor: 'price',
+            // width: 100,
             filterable: true
 
          },
@@ -111,8 +118,8 @@ class Container extends React.PureComponent<> {
             Header: 'Actions',
             Cell: row => (
                 <div> 
-                    <button className="btn btn-warning btn-sm" onClick = {e => {this.toggleEditModal(); }}><i className="fas fa-pencil-alt mr-1"></i>Edit</button>
-                    <button className="btn btn-danger btn-sm"  onClick = {e => {this.toggleSweetAlert(); }}><i className="fas fa-trash-alt mr-1"></i>Delete</button>
+                    <button className="btn btn-warning btn-sm" onClick = {e => {this.toggleEditModal(); }} onClick={() => {}}><i className="fas fa-pencil-alt mr-1"></i>Edit</button>
+                    <button className="btn btn-danger btn-sm"  onClick = {e => {this.toggleSweetAlert(); }} onClick={() => {}}><i className="fas fa-trash-alt mr-1"></i>Delete</button>
                     <SweetAlert
                         show = {this.state.showSweetAlert}   
                         icon = "warning"

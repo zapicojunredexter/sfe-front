@@ -1,4 +1,5 @@
 import React from 'react';
+import StorageService from '../../../services/storage.service';
 
 class Container extends React.PureComponent<> {
     state = {
@@ -7,6 +8,7 @@ class Container extends React.PureComponent<> {
         stockQty: '',
         serving: '',
         price: '',
+        imgUrl: '',
     };
 
     handleChange = (key, value) => {
@@ -39,9 +41,37 @@ class Container extends React.PureComponent<> {
                                     <span className="input-group-text" id="inputGroupFileAddon01">Upload</span>
                                     </div>
                                     <div className="custom-file">
-                                    <input type="file" className="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01"/>
+                                    <input
+                                        type="file"
+                                        className="custom-file-input"
+                                        id="inputGroupFile01"
+                                        aria-describedby="inputGroupFileAddon01"
+                                        onChange={ev => {
+                                            const file = ev.target.files[0];
+                                            StorageService.uploadFile([file])()
+                                                .then(res => {
+                                                    this.setState({imgUrl: res[0]});
+                                                })
+                                                .catch(err => {
+                                                    alert(err.message);
+                                                })
+                                        }}
+                                    />
                                     <label className="custom-file-label" for="inputGroupFile01">Choose Product's Image</label>
                                     </div>
+                                </div>
+                                <div style={{textAlign: 'center', marginTop: 10}}>
+
+                                    <img
+                                        src={this.state.imgUrl}
+                                        alt={this.state.imgUrl}
+                                        style={{
+                                            width: 100,
+                                            height: 100,
+                                            alignSelf: 'center',
+                                            borderRadius: '50%',
+                                        }}
+                                    />
                                 </div>
                                 <div className="md-form">
                                     <input value={this.state.name} onChange={ev => this.handleChange('name',ev.target.value)} type="text" id="productName" className="form-control"/>
@@ -76,6 +106,7 @@ class Container extends React.PureComponent<> {
                                         stockQty: Number(this.state.stockQty),
                                         price: Number(this.state.price),
                                         serving: this.state.serving,
+                                        imgUrl: this.state.imgUrl,
                                     };
                                     this.props.onSubmit(payload);
                                 }}
