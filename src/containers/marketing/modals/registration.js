@@ -9,6 +9,7 @@ class Container extends React.PureComponent<> {
         password: '',
         name: '',
         description: '',
+        contactNumber: '',
         location: '',
     };
 
@@ -65,6 +66,10 @@ class Container extends React.PureComponent<> {
                                 <label for="storelocation">Store Location</label>
                                 </div>
                                 <div className="md-form">
+                                <input value={this.state.contactNumber} onChange={e => this.handleChange('contactNumber', e.target.value)} type="text" id="storelocation" class="form-control"/>
+                                <label for="contactNumber">Contact Number</label>
+                                </div>
+                                <div className="md-form">
                                 <textarea value={this.state.description} onChange={e => this.handleChange('description', e.target.value)} id="storedesc" class="md-textarea form-control" rows="3"></textarea>
                                 <label for="storedesc">Store Description</label>
                                 </div>
@@ -92,8 +97,10 @@ class Container extends React.PureComponent<> {
                                 const store = {
                                     name: this.state.name,
                                     description: this.state.description,
+                                    contactNumber: this.state.contactNumber,
                                     address: this.state.location,
                                     deliveryFee: 0,
+                                    isDisabled: true,
                                     operatingHours: {
                                         Monday: {
                                             key: 'Monday',

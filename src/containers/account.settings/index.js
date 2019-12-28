@@ -6,12 +6,10 @@ import Header from '../../components/header';
 import SideBar from '../../components/vendor.sidebar';
 
 class Container extends React.PureComponent<> {
-    state = {
-
-    };
     constructor(props) {
         super(props);
         const { user } = props;
+        console.log('dia rang user', user);
         this.state = {
             username: user ? user.username : '',
             password: user ? user.password : '',
@@ -100,7 +98,7 @@ class Container extends React.PureComponent<> {
 
                                 <div className="md-form">
                                     <i className="fas fa-store prefix"></i>
-                                    <input type="text" id="form1" className="form-control" value="I dont Know Store" disabled/>
+                                    <input type="text" id="form1" className="form-control" value={this.state.name} disabled/>
                                     <label className="active">Store Name</label>
                                 </div>
                                 <div className="md-form">

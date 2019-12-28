@@ -5,11 +5,26 @@ import UserService from '../../services/user.service';
 import { setUser, setIsLoggedIn } from '../../redux/user/user.action';
 import LoginModal from './modals/login';
 import RegisterModal from './modals/registration';
+import Loader from '../../components/loader';
 import './style.scss'
 
 class Container extends React.PureComponent<> {
     state = {
-        show: false
+        show: false,
+        isInitializing: true,
+    }
+    listener = null;
+    cancelListener = () => {
+        if(this.listener) {
+            this.listener();
+        }
+    }
+    createListener = (userId) => {
+        
+        this.cancelListener();
+        this.listener = UserService.createUserListener(userId, (user) => {
+            this.login(user.username, user.password);
+        })
     }
 
     componentDidMount(){
@@ -24,6 +39,8 @@ class Container extends React.PureComponent<> {
             if(userObj.username && userObj.password) {
                 this.login(userObj.username, userObj.password);
             }
+        } else {
+            this.setState({isInitializing: false,})
         }
     }
 
@@ -41,10 +58,20 @@ class Container extends React.PureComponent<> {
         UserService.login(username, password)
             .then((user) => {
                 localStorage.setItem('user', JSON.stringify(user));
-                this.props.setUser(user);
-                this.props.setIsLoggedIn();
+                if(user.type === 'store') {
+                    this.props.setUser(user);
+                    this.props.setIsLoggedIn();
+                    this.setState({isInitializing: false});
+                } else {
+                    // should be remade to support admin credentials
+                    this.props.setUser(user);
+                    this.props.setIsLoggedIn();
+                }
             })
-            .catch(err => alert(err.message));
+            .catch(err => {
+                alert(err.message);
+                this.setState({isInitializing: false});
+            });
     }
 
     register = (user, store) => {
@@ -57,7 +84,12 @@ class Container extends React.PureComponent<> {
     
 
     render() {
-
+        const { isInitializing } = this.state;
+        if(isInitializing){
+            return (
+                <Loader />
+            );
+        }
         return (
             <div>
                 <nav className="mb-1 navbar navbar-expand-lg navbar-dark navbar__container sticky-top">

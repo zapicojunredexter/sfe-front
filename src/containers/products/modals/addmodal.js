@@ -1,5 +1,6 @@
 import React from 'react';
 import StorageService from '../../../services/storage.service';
+import Image from '../../../components/image';
 
 class Container extends React.PureComponent<> {
     state = {
@@ -9,6 +10,7 @@ class Container extends React.PureComponent<> {
         serving: '',
         price: '',
         imgUrl: '',
+        isImageUploading: false,
     };
 
     handleChange = (key, value) => {
@@ -25,7 +27,7 @@ class Container extends React.PureComponent<> {
         }
         return (
             <div >
-               <div className="modal fade show" id="addProduct" tabIndex="-1" role="dialog" aria-labelledby="addProduct" style={{display: 'block', paddingRight: '17px'}} aria-modal="true">
+               <div className="modal fade show" id="addProduct" tabIndex="-1" role="dialog" aria-labelledby="addProduct" style={{display: 'block', paddingRight: '17px', overflow:'scroll'}} aria-modal="true">
                     <div className="modal-dialog modal-md" role="document">
                         <div className="modal-content">
                             <div className="modal-header">
@@ -36,6 +38,19 @@ class Container extends React.PureComponent<> {
                             </div>
                             <div className="modal-body">
 
+                                <div style={{textAlign: 'center', marginTop: 10, marginBottom: 10}}>
+                                    <Image
+                                        imgUrl={this.state.imgUrl}
+                                        style={{
+                                            width: 150,
+                                            height: 150,
+                                            alignSelf: 'center',
+                                            // borderRadius: '50%',
+                                            objectFit: 'cover'
+                                        }}
+                                        isLoading={this.state.isImageUploading}
+                                    />
+                                </div>
                                 <div className="input-group">
                                     <div className="input-group-prepend">
                                     <span className="input-group-text" id="inputGroupFileAddon01">Upload</span>
@@ -48,30 +63,20 @@ class Container extends React.PureComponent<> {
                                         aria-describedby="inputGroupFileAddon01"
                                         onChange={ev => {
                                             const file = ev.target.files[0];
+                                            this.setState({isImageUploading: true});
                                             StorageService.uploadFile([file])()
                                                 .then(res => {
                                                     this.setState({imgUrl: res[0]});
+                                                    this.setState({isImageUploading: false});
                                                 })
                                                 .catch(err => {
                                                     alert(err.message);
+                                                    this.setState({isImageUploading: false});
                                                 })
                                         }}
                                     />
                                     <label className="custom-file-label" for="inputGroupFile01">Choose Product's Image</label>
                                     </div>
-                                </div>
-                                <div style={{textAlign: 'center', marginTop: 10}}>
-
-                                    <img
-                                        src={this.state.imgUrl}
-                                        alt={this.state.imgUrl}
-                                        style={{
-                                            width: 100,
-                                            height: 100,
-                                            alignSelf: 'center',
-                                            borderRadius: '50%',
-                                        }}
-                                    />
                                 </div>
                                 <div className="md-form">
                                     <input value={this.state.name} onChange={ev => this.handleChange('name',ev.target.value)} type="text" id="productName" className="form-control"/>

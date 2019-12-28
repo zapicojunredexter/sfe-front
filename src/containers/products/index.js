@@ -6,6 +6,7 @@ import SideBar from '../../components/vendor.sidebar';
 import AddModal from './modals/addmodal';
 import EditModal from './modals/editmodal';
 import ReactTable from 'react-table';
+import Image from '../../components/image';
 import 'react-table/react-table.css';
 import SweetAlert from 'sweetalert2-react';
 import ProductService from '../../services/products.service';
@@ -15,12 +16,14 @@ class Container extends React.PureComponent<> {
 
     state = {
         products: [],
-        show: false
+        show: false,
+        toEdit: null,
+        toDelete: null,
     };
     componentDidMount(){
         this.closeListener();
         this.listener = ProductService.createStoreProductsListener(this.props.userId, (data) => {
-            this.setState({products: data});
+            this.setState({products: data.filter(dat => dat.deleted === false)});
         });
     }
     componentWillUnmount(){
@@ -46,46 +49,17 @@ class Container extends React.PureComponent<> {
     toggleSweetAlert = () => this.setState({ showSweetAlert: !this.state.showSweetAlert })
     
     render() {
-        const data = [{
-            id: 1,
-            image: <img src="https://mdbootstrap.com/img/logo/mdb-email.png" className="img-fluid" alt="" style={{maxWidth: "120px"}} />,
-            name: 'Pork Siomai',
-            description: 'Lorem Ipsum etc etc',
-            quantity: '20 packs'
-         },
-         {
-            id: 2,
-            image: <img src="https://mdbootstrap.com/img/logo/mdb-email.png" className="img-fluid" alt="" style={{maxWidth: "120px"}} />,
-            name: 'Hawaiian Pizza',
-            description: 'Lorem Ipsum etc etc',
-            quantity: '15 boxes'
-         },
-         {
-            id: 3,
-            image: <img src="https://mdbootstrap.com/img/logo/mdb-email.png" className="img-fluid" alt="" style={{maxWidth: "120px"}} />,
-            name: 'Fish Ball',
-            description: 'Lorem Ipsum etc etc',
-            quantity: '10 packs'
-         },
-         {
-            id: 4,
-            image: <img src="https://mdbootstrap.com/img/logo/mdb-email.png" className="img-fluid" alt="" style={{maxWidth: "120px"}} />,
-            name: 'Lumpia Shanghai',
-            description: 'Lorem Ipsum etc etc',
-            quantity: '35 pieces'
-         }]
-
          const columns =[{
             Header: 'Id',
             accessor: 'id',
             filterable: true,
-            width: 100
+            // width: 100
          },
          {
             Header: 'Image',
             accessor: 'image',
             filterable: true,
-            Cell: ({original}) => <img src={original.imgUrl} className="img-fluid" alt="" style={{maxWidth: "120px"}} />,
+            Cell: ({original}) => <Image imgUrl={original.imgUrl} className="img-fluid" alt="" style={{maxWidth: "120px"}} />,
             width: 180
 
          },
@@ -116,25 +90,58 @@ class Container extends React.PureComponent<> {
          },
          {
             Header: 'Actions',
-            Cell: row => (
+            Cell: ({original}) => (
                 <div> 
-                    <button className="btn btn-warning btn-sm" onClick = {e => {this.toggleEditModal(); }} onClick={() => {}}><i className="fas fa-pencil-alt mr-1"></i>Edit</button>
-                    <button className="btn btn-danger btn-sm"  onClick = {e => {this.toggleSweetAlert(); }} onClick={() => {}}><i className="fas fa-trash-alt mr-1"></i>Delete</button>
-                    <SweetAlert
-                        show = {this.state.showSweetAlert}   
-                        icon = "warning"
-                        title = "Are you sure?"
-                        text = "you want to delete this user?"
-                        onConfirm = {() => this.setState({ show: false})}
-                        
-                    />
+                    <button
+                        className="btn btn-warning btn-sm"
+                        onClick={() => {
+                            this.setState({toEdit: original});
+                        }}>
+                            <i className="fas fa-pencil-alt mr-1"></i>Edit
+                        </button>
+                    <button
+                        className="btn btn-danger btn-sm"
+                        onClick={() => {
+                            this.setState({toDelete: original});
+                        }}
+                        >
+                            <i className="fas fa-trash-alt mr-1"></i>Delete
+                        </button>
                 </div>
                 
-            )
+            ),
+            width: 270,
          }];
+        console.log('hehe', this.state.toDelete)
 
         return (
             <div>
+                {true && (
+                    <SweetAlert
+                        show={!!this.state.toDelete}
+                        icon = "warning"
+                        title = "Are you sure?"
+                        text = {`you want to delete ${this.state.toDelete && this.state.toDelete.name} ?`}
+                        onConfirm = {() => {
+                            const payload = {
+                                deleted: true,
+                            };
+                            ProductService.update(this.state.toDelete.id, payload)()
+                                .then(() => {
+                                    alert('successfully deleted item');
+                                    this.setState({ toDelete: null});
+                                })
+                                .catch(err => {
+                                    alert(err.message);
+                                    this.setState({ toDelete: null});
+                                })
+                        }}
+                        onCancel={() => {
+                            this.setState({ toDelete: null });
+                        }}
+                        // showCancelButton
+                    />
+                )}
                 <div>
                     <Header />
                 </div>
@@ -173,22 +180,27 @@ class Container extends React.PureComponent<> {
                                             });
                                     }}
                                 />
-                               <EditModal
-                                    onClose={this.toggleEditModal}
-                                    show={this.state.showEditModal}
-                                    onSubmit={payload => {
-                                        const updatedPayload = {
-                                            ...payload,
-                                        };
-                                        this.props.addProduct(updatedPayload)
-                                            .then(() => {
-                                                alert('successfully updated');
-                                            })
-                                            .catch(err => {
-                                                alert(err.message);
-                                            });
-                                    }}
-                                />
+                                {!!this.state.toEdit && (
+                                    <EditModal
+                                        onClose={() => this.setState({toEdit: null})}
+                                        show={!!this.state.toEdit}
+                                        toEdit={this.state.toEdit}
+                                        onSubmit={payload => {
+                                            const updatedPayload = {
+                                                ...payload,
+                                            };
+                                            console.log(updatedPayload);
+                                            ProductService.update(this.state.toEdit.id, updatedPayload)()
+                                                .then(() => {
+                                                    alert('successfully updated');
+                                                    this.setState({toEdit: null});
+                                                })
+                                                .catch(err => {
+                                                    alert(err.message);
+                                                })
+                                        }}
+                                    />
+                                )}
 
                                <ReactTable style={{marginTop: "2em"}}
                                     data = {this.state.products}
