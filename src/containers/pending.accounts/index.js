@@ -77,6 +77,20 @@ class Container extends React.PureComponent<> {
             filterable: true
          },
          {
+            Header: 'Account Status',
+            Cell: ({original}) => (
+                <span>
+                    {
+                    original.isDisabled ?
+                        'DISABLED' :
+                        'ACTIVE'
+                    }
+                </span>
+                
+            )
+           
+         },
+         {
             Header: 'Actions',
             Cell: ({original}) => (
                 <div>

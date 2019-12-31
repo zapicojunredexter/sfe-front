@@ -4,12 +4,27 @@ import AuthService from '../../services/auth.service';
 import StoreService from '../../services/store.service';
 import Header from '../../components/header';
 import SideBar from '../../components/vendor.sidebar';
+import ReactMapboxGl, { Layer, Feature, Marker } from "react-mapbox-gl";
+
+import Geocode from 'react-geocode';
+
+// set Google Maps Geocoding API for purposes of quota management. Its optional but recommended.
+Geocode.setApiKey('AIzaSyDIgLS5x_E4Myg9ov45Vrg7on56o_Ej1X0');
+
+// ES5
+
+const Map = ReactMapboxGl({
+  accessToken: "pk.eyJ1IjoiemFwaWNvanVucmVkZXh0ZXIiLCJhIjoiY2p0aDlsZHN5MG5xaDN5cDhtbGdrN3hkeSJ9.UOC5ygISBssSgsyXp7rruQ"
+});
+
+
+const center = [123.903557, 10.299158];
+const zoom = [15];
 
 class Container extends React.PureComponent<> {
     constructor(props) {
         super(props);
         const { user } = props;
-        console.log('dia rang user', user);
         this.state = {
             username: user ? user.username : '',
             password: user ? user.password : '',
@@ -18,6 +33,7 @@ class Container extends React.PureComponent<> {
             operatingHours: user ? user.operatingHours : '',
             address: user ? user.address : '',
             deliveryFee: user ? user.deliveryFee : '',
+            location: user ? user.location : { latitude: center[1], longitude: center[0] },
         };
     }
 
@@ -37,13 +53,24 @@ class Container extends React.PureComponent<> {
         });
     }
 
+    handleChangeCoordinates = (event, {lngLat}) => {
+        const { lng, lat } = lngLat;
+            this.setState({
+                location: {
+                    latitude: lat,
+                    longitude: lng,
+                }
+            });
+    }
+
     updateAccountDetails = () => {
         const store = {
             name: this.state.name,
             description: this.state.description,
             address: this.state.address,
             deliveryFee:Number(this.state.deliveryFee),
-            operatingHours: this.state.operatingHours
+            operatingHours: this.state.operatingHours,
+            location: this.state.location
         };
         const { user } = this.props;
         if(user){
@@ -61,8 +88,8 @@ class Container extends React.PureComponent<> {
 
     }
     render() {
+        console.log('hehe', this.state.location);
         const { user } = this.props;
-        console.log('hehe', this.state.operatingHours);
         return (
             <div>
                 <div>
@@ -301,6 +328,45 @@ class Container extends React.PureComponent<> {
                                     <input type="number" onChange={ev => this.handleChange('deliveryFee', ev.target.value)} value={this.state.deliveryFee} className="form-control" />
                                     <label className="active">Delivery Fee</label>
                                 
+                                </div>
+                                <div className="md-form" style={{marginTop: 10}}>
+                                    <Map
+                                        style="mapbox://styles/mapbox/streets-v9"
+                                        containerStyle={{
+                                            height: 300,
+                                            width: '50%',
+                                            // width: "80%",
+                                            marginLeft: "25%",
+                                            marginRight: "25%",
+                                        }}
+                                        zoom={zoom}
+                                        center={center}
+                                        center={[this.state.location.longitude, this.state.location.latitude]}
+                                        onClick={this.handleChangeCoordinates}
+                                    >
+
+                                        {this.state.location && this.state.location.latitude && this.state.location.longitude && (
+                                            <Marker
+                                                coordinates={[this.state.location.longitude, this.state.location.latitude]}
+                                                anchor="bottom">
+                                                <img src="http://cdn.onlinewebfonts.com/svg/img_280333.png" style={{width: 20}}/>
+                                            </Marker>
+                                            // <Layer
+                                            //     type="circle"
+                                            //     id="marker"
+                                            //     paint={{
+                                            //     "circle-color": "#336699",
+                                            //     "circle-stroke-width": 1,
+                                            //     "circle-stroke-color": "#fff",
+                                            //     "circle-stroke-opacity": 1
+                                            //     }}
+                                            // >
+                                            //     <Feature coordinates={[this.state.fromLng, this.state.fromLat]} />
+                                            //     <Feature coordinates={[this.state.fromLng, this.state.fromLat]} />
+                                            // </Layer>
+                                        )}
+                                    </Map>
+                                    
                                 </div>
                                 <div className="text-right">
                                     <button onClick={this.updateAccountDetails} className="btn btn-warning btn-md" ><i className="fas fa-pencil-alt mr-1"></i>Edit</button>

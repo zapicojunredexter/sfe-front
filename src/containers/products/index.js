@@ -9,6 +9,8 @@ import ReactTable from 'react-table';
 import Image from '../../components/image';
 import 'react-table/react-table.css';
 import SweetAlert from 'sweetalert2-react';
+import swal from 'sweetalert';
+
 import ProductService from '../../services/products.service';
 
 class Container extends React.PureComponent<> {
@@ -102,7 +104,35 @@ class Container extends React.PureComponent<> {
                     <button
                         className="btn btn-danger btn-sm"
                         onClick={() => {
-                            this.setState({toDelete: original});
+                            // this.setState({toDelete: original});
+                            swal({
+                                title: `Are you sure you want to delete ${original.name}?`,
+                                text: "Once deleted, you will not be able to undo this action",
+                                icon: "warning",
+                                buttons: true,
+                                dangerMode: true,
+                              })
+                              .then((willDelete) => {
+                                if (willDelete) {
+                                    const payload = {
+                                        deleted: true,
+                                    };
+                                    ProductService.update(original.id, payload)()
+                                        .then(() => {
+                                            alert('successfully deleted item');
+                                            this.setState({ toDelete: null});
+                                        })
+                                        .catch(err => {
+                                            alert(err.message);
+                                            this.setState({ toDelete: null});
+                                        });
+                                //   swal("Poof! Your product has been deleted!", {
+                                //     icon: "success",
+                                //   });
+                                } else {
+                                    //   swal("Your imaginary file is safe!");
+                                }
+                              });
                         }}
                         >
                             <i className="fas fa-trash-alt mr-1"></i>Delete
@@ -116,6 +146,7 @@ class Container extends React.PureComponent<> {
 
         return (
             <div>
+                {/*
                 {true && (
                     <SweetAlert
                         show={!!this.state.toDelete}
@@ -141,7 +172,8 @@ class Container extends React.PureComponent<> {
                         }}
                         // showCancelButton
                     />
-                )}
+                )}*/}
+                
                 <div>
                     <Header />
                 </div>

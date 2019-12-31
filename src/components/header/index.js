@@ -31,10 +31,11 @@ class Container extends React.PureComponent<> {
                         aria-haspopup="true" aria-expanded="false">
                         {user && user.name} </a>
                         <div className="dropdown-menu dropdown-menu-right dropdown-info" aria-labelledby="navbarDropdownMenuLink-4">
-                            
+                            {user && user.type !== 'admin' &&
                             <Link to="account_settings" className="dropdown-item">
                                 <i className="fas fa-users mr-3"></i>Account Settings
                             </Link>
+                            }
                             <a
                                 className="dropdown-item"
                                 onClick={() => {
