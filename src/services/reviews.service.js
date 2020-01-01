@@ -2,7 +2,7 @@ import firebase from 'firebase/app';
 import 'firebase/firestore';
 export default class Service {
 
-    static collection = () => firebase.firestore().collection('reviews');
+    static collection = () => firebase.firestore().collection('feedbacks');
 
     static add = (params) => async (dispatch, getState) => {
         try {
@@ -58,7 +58,7 @@ export default class Service {
     }
 
     static createStoreReviewsListener = (storeId, callback = () => {}, query) => {
-        return Service.collection().where('store.id','==',storeId).onSnapshot((result) => {
+        return Service.collection().where('reviewee.id','==',storeId).onSnapshot((result) => {
             const data = result.docs.map(data => ({id: data.id, ...data.data()}));
             callback(data);
         });

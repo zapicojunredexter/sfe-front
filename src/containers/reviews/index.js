@@ -7,26 +7,6 @@ import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import ReviewsService from '../../services/reviews.service';
 
-const columns = [
-    {
-        Header: 'Id',
-        accessor: 'id',
-        width: 70,
-        filterable: true
-        
-    },
-    {
-        Header: 'Customer Name',
-        accessor: 'customer_name',
-        filterable: true
-        
-    },
-    {
-        Header: 'Rating',
-        accessor: 'rating',
-        filterable: true
-    }
-];
 
 class Container extends React.PureComponent<> {
     listener = null;
@@ -94,6 +74,32 @@ class Container extends React.PureComponent<> {
                 ' Im Jisoo Im okay!'
                 ]
          }];
+        const columns = [
+            {
+                Header: 'Id',
+                accessor: 'id',
+                width: 100,
+                filterable: true,
+            },
+            {
+                Header: 'Customer Name',
+                accessor: (data) => data.reviewer.name,
+                id: 'revieweeName',
+                filterable: true
+                
+            },
+            {
+                Header: 'Rating',
+                accessor: 'rating',
+                filterable: true,
+                Cell: ({original}) => (
+                    <>
+                        {new Array(original.rating || 0).fill(null).map(() => <i class="fas fa-star" style={{color: '#FF8800'}}></i>)}
+                        {original.review}
+                    </>
+                ),
+            }
+        ];
 
         return (
             <div>
@@ -114,7 +120,7 @@ class Container extends React.PureComponent<> {
                                 </h4>
 
                                 <ReactTable style={{marginTop: "2em"}}
-                                    data = {data}
+                                    data = {this.state.reviews}
                                     columns = {columns}
                                     defaultPageSize = {10}
                                     pageSizeOptions = {[10,30,50]}

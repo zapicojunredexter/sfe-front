@@ -4,7 +4,9 @@ import AuthService from '../../services/auth.service';
 import StoreService from '../../services/store.service';
 import Header from '../../components/header';
 import SideBar from '../../components/vendor.sidebar';
+import Image from '../../components/image';
 import ReactMapboxGl, { Layer, Feature, Marker } from "react-mapbox-gl";
+import StorageService from '../../services/storage.service';
 
 import Geocode from 'react-geocode';
 
@@ -34,6 +36,8 @@ class Container extends React.PureComponent<> {
             address: user ? user.address : '',
             deliveryFee: user ? user.deliveryFee : '',
             location: user ? user.location : { latitude: center[1], longitude: center[0] },
+            displayPicUrl: user ? user.displayPicUrl : '',
+            isImageUploading: false,
         };
     }
 
@@ -70,7 +74,8 @@ class Container extends React.PureComponent<> {
             address: this.state.address,
             deliveryFee:Number(this.state.deliveryFee),
             operatingHours: this.state.operatingHours,
-            location: this.state.location
+            location: this.state.location,
+            displayPicUrl: this.state.displayPicUrl,
         };
         const { user } = this.props;
         if(user){
@@ -120,8 +125,48 @@ class Container extends React.PureComponent<> {
                                 </div>
 
                                 <hr/>
-
+                                
                                 <h4 style={{marginTop: '2em'}}>Store Information</h4>
+<div style={{textAlign: 'center'}}>
+
+                                    <div className="input-group">
+                                        <div className="input-group-prepend">
+                                            <span className="input-group-text" id="inputGroupFileAddon01">Upload</span>
+                                        </div>
+                                        <div className="custom-file">
+                                            <input
+                                                type="file"
+                                                className="custom-file-input"
+                                                id="inputGroupFile01"
+                                                aria-describedby="inputGroupFileAddon01"
+                                                onChange={ev => {
+                                                    const file = ev.target.files[0];
+                                                    this.setState({isImageUploading: true});
+                                                    StorageService.uploadFile([file])()
+                                                        .then(res => {
+                                                            this.setState({displayPicUrl: res[0]});
+                                                            this.setState({isImageUploading: false});
+                                                        })
+                                                        .catch(err => {
+                                                            alert(err.message);
+                                                            this.setState({isImageUploading: false});
+                                                        })
+                                                }}
+                                            />
+                                        <label className="custom-file-label" for="inputGroupFile01">Choose Product's Image</label>
+                                        </div>
+                                    </div>
+                                    <Image
+                                        style={{
+                                            marginTop: 20,
+                                            // objectFit: 'cover',
+                                            // width: 200,
+                                            height: 200,
+                                        }}
+                                        imgUrl={this.state.displayPicUrl}
+                                        isLoading={this.state.isImageUploading}
+                                    />
+                                </div>
 
                                 <div className="md-form">
                                     <i className="fas fa-store prefix"></i>
