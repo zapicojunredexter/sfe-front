@@ -1,6 +1,5 @@
-
-
 import React from 'react';
+
 
 class Container extends React.PureComponent<> {
 
@@ -12,10 +11,12 @@ class Container extends React.PureComponent<> {
         this.props.onClose && this.props.onClose(e)
     }
 
+    
     render() {
         if(!this.props.show){
             return null;
         }
+
         return (
             <div >
                 <div className="modal fade right show mlogin__container" id="sideModalTR" tabIndex="-1" role="dialog" aria-labelledby="myModalLabel" data-gtm-vis-first-on-screen-2340190_1302="1983489"
@@ -52,7 +53,7 @@ class Container extends React.PureComponent<> {
                                 this.props.onSubmit(this.state.username, this.state.password);
                             }}
                         >
-                            Save changes
+                            Login
                         </button>
                     </div>
                     </div>

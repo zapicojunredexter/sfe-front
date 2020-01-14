@@ -76,16 +76,11 @@ class Container extends React.PureComponent<> {
          }];
         const columns = [
             {
-                Header: 'Id',
-                accessor: 'id',
-                width: 100,
-                filterable: true,
-            },
-            {
                 Header: 'Customer Name',
                 accessor: (data) => data.reviewer.name,
                 id: 'revieweeName',
-                filterable: true
+                filterable: true,
+                width: 200
                 
             },
             {

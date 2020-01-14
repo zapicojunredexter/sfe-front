@@ -81,7 +81,7 @@ class Container extends React.PureComponent<> {
                                     <li>Requirement 4</li>
                                 </ul>
                                 <input type="checkbox" />
-                                <span className="terms">Check here to indicate that you have read and agree to the <a className="text-info">Terms and Conditions</a> of Street Food Express.</span> 
+                                <span className="terms">Check here to indicate that you have read and agree to the <a className="text-info" target="_blank" href="">Terms and Conditions</a> of Street Food Express.</span> 
                             </div>
                         </div>
                     <div className="modal-footer">
