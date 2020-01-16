@@ -5,107 +5,206 @@ import Header from '../../components/header';
 import SideBar from '../../components/vendor.sidebar';
 import ReactTable from 'react-table';
 import Chart from "react-apexcharts";
+import TotalOrdersChart from './charts/TotalOrders';
+import TotalProductsSold from './charts/TotalProductsSold';
+import Sales from './charts/Sales';
+import OrderService from '../../services/orders.service';
+import ProductService from '../../services/products.service';
 import 'react-table/react-table.css';
 
 
 class Container extends React.PureComponent<> {
-    constructor(props) {
-        super(props);
+    ordersListener = null;
+
+    productsListener = null;
+
+    state = {
+        orders: [],
+        products: [],
+    };
+    componentDidMount(){
+        this.closeListeners();
+        this.ordersListener = OrderService.createStoreListener(this.props.userId, (data) => {
+            this.setState({orders: data});
+        });
+        this.productsListener = ProductService.createStoreProductsListener(this.props.userId, (data) => {
+            this.setState({products: data.filter(dat => dat.deleted === false)});
+        });
+    }
+    componentWillUnmount(){
+        this.closeListeners();
+    }
+
+    closeListeners = () => {
+        if(this.ordersListener){
+            this.ordersListener();
+        }
+        if(this.productsListener) {
+            this.productsListener();
+        }
+    }
+
+    msToDays  = (ms) => {
+        return ms / 86400000;
+    }
+   summarizeTotalOrdersReport = () => {
+       const { orders } = this.state;
+       const now = new Date();
+       const thisMonth = now.getMonth();
+       const lastMonth = thisMonth === 0 ? 11 : thisMonth - 1;
+       const lastYear = thisMonth === 0 ? now.getFullYear() - 1: now.getFullYear();
+       const ordersWithDate = orders.map(order => {
+           const createdDate = order.createdAtMs.toDate();
+           return {
+               ...order,
+               createdAtDate: createdDate,
+               daysDiff: this.msToDays(now.getTime() - createdDate.getTime())
+           }
+       });
+
+       const forToday = ordersWithDate.filter(order => {
+            const createdDate = order.createdAtDate;
+            return (
+                createdDate &&
+                createdDate.getFullYear() === now.getFullYear() &&
+                createdDate.getMonth() === now.getMonth() &&
+                createdDate.getDate() === now.getDate()
+            )
+        });
+
+        const forThisWeek = ordersWithDate.filter(order => {
+            const daysDiff = order.daysDiff;
+            return (
+                daysDiff <= 7
+            )
+        });
+
+        const forThisMonth = ordersWithDate.filter(order => {
+            const createdDate = order.createdAtDate;
+            return (
+                createdDate &&
+                createdDate.getFullYear() === now.getFullYear() &&
+                createdDate.getMonth() === now.getMonth()
+            )
+        });
+
+        const forLastMonth = ordersWithDate.filter(order => {
+            const createdDate = order.createdAtDate;
+            return (
+                createdDate &&
+                createdDate.getFullYear() === lastYear &&
+                createdDate.getMonth() === lastMonth
+            )
+        });
+       const todayCount = forToday.length;
+       const thisWeekCount = forThisWeek.length;
+       const thisMonthCount = forThisMonth.length;
+       const lastMonthCount = forLastMonth.length;
+       return [todayCount, thisWeekCount, thisMonthCount, lastMonthCount];
+   }
+
+   summarizeProducts = () => {
+
+        const { orders, products } = this.state;
+        return products.map(product => `${product.name}(${product.serving})`);
+   }
+
+   summarizeTotalProductsSoldReport = () => {
+        const { orders, products } = this.state;
+        return products.map(product => product.stockQty);
+        return [30, 125, 70, 60];
+   }
     
-        this.state = {
-            option1: {
-                chart: {
-                  id: "orders",
-                  toolbar:{
-                    show: false
-                  }
-                },
-                xaxis: {
-                  categories: ['Today', 'This Week','This Month', 'Last Month']
-                },
-                yaxis: {
-                    title: {
-                      text: 'No. of Orders'
-                    }
-                },
-              },
-              series1: [
-                {
-                  name: "Total Orders",
-                  data: [30, 125, 300, 600]
-                }
-              ],
-
-          option2: {
-            chart: {
-              id: "products",
-              toolbar:{
-                show: false
-              }
-            },
-            xaxis: {
-              categories: ['Chicken(pieces)', 'Pizza(Boxes)','Kwek-Kwek(servings)', 'Burger(pieces)']
-            },
-            yaxis: {
-                title: {
-                  text: 'Stock Quantity'
-                }
-            },
-          },
-          series2: [
-            {
-              name: "Stock Quantity",
-              data: [30, 125, 70, 60]
+    summarizeWeeklyReport = () => {
+        const { orders, products } = this.state;
+        const now = new Date();
+        const ordersWithDate = orders.map(order => {
+            const createdDate = order.createdAtMs.toDate();
+            return {
+                ...order,
+                createdAtDate: createdDate,
+                daysDiff: this.msToDays(now.getTime() - createdDate.getTime())
             }
-          ],
+        });
+        const forThisWeek = ordersWithDate.filter(order => {
+            const daysDiff = order.daysDiff;
+            return (
+                daysDiff <= 7
+            )
+        });
+        const weekArray = new Array(7).fill(null).map((it, index) => {
+            const day = index;
+            const matchedDay = forThisWeek.filter(ftw => ftw.createdAtDate.getDay() === day);
+            return matchedDay.length;
+        });
+        return [
+            {
+              name: "This Week Total Sales",
+              data: [2000, 1250, 1500, 3211, 5231, 1312, 2231],
+              data: weekArray,
+            }
+        ];
+    }
+
+    summarizeYearlyReport = () => {
+        const { orders, products } = this.state;
+        const now = new Date();
+        const ordersWithDate = orders.map(order => {
+            const createdDate = order.createdAtMs.toDate();
+            return {
+                ...order,
+                createdAtDate: createdDate,
+                daysDiff: this.msToDays(now.getTime() - createdDate.getTime())
+            }
+        });
+        const monthArray = new Array(12).fill(null).map((it, index) => {
+            const month = index;
+            const matchMonth = ordersWithDate.filter(order => {
+                const createdDate = order.createdAtDate;
+                return (
+                    createdDate &&
+                    createdDate.getFullYear() === now.getFullYear() &&
+                    createdDate.getMonth() === month
+                );
+            });
+            return matchMonth.length;
+        });
+        return [
+            {
+              name: "This Week Total Sales",
+              data: [22000, 17250, 15200, 22211, 15231, 11312, 12231, 12312, 21121,12311,11211,13212],
+              data: monthArray
+            }
+        ]
+    }
+
+    summarizeDailySales = () => {
+
+        const { orders, products } = this.state;
+        const now = new Date();
+        const ordersWithDate = orders.map(order => {
+            const createdDate = order.createdAtMs.toDate();
+            return {
+                ...order,
+                createdAtDate: createdDate,
+                daysDiff: this.msToDays(now.getTime() - createdDate.getTime())
+            }
+        });
         
-          option3: {
-            chart: {
-              id: "sales",
-              toolbar:{
-                show: false
-              }
-            },
-            xaxis: {
-              categories: ['Monday', 'Tuesday','Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-            },
-            yaxis: {
-                title: {
-                    text: '₱ (sales)'
-                }
-            },
-          },
-          series3: [
-            {
-              name: "This Week Total Sales",
-              data: [2000, 1250, 1500, 3211, 5231, 1312, 2231]
-            }
-          ],
-          option4: {
-            chart: {
-              id: "sales",
-              toolbar:{
-                show: false
-              }
-            },
-            xaxis: {
-              categories: ['January', 'February','March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-            },
-            yaxis: {
-                title: {
-                    text: '₱ (sales 2019)'
-                }
-            },
-          },
-          series4: [
-            {
-              name: "This Week Total Sales",
-              data: [22000, 17250, 15200, 22211, 15231, 11312, 12231, 12312, 21121,12311,11211,13212]
-            }
-          ]
+        const forToday = ordersWithDate.filter(order => {
+            const createdDate = order.createdAtDate;
+            return (
+                createdDate &&
+                createdDate.getFullYear() === now.getFullYear() &&
+                createdDate.getMonth() === now.getMonth() &&
+                createdDate.getDate() === now.getDate()
+            )
+        });
 
-        };
-      }
+        const totalSales = forToday.reduce((acc, cur) => acc + cur.payment.total,0);
+        return totalSales;
+    }
+
     render() {
         return (
             <div>
@@ -117,76 +216,20 @@ class Container extends React.PureComponent<> {
                 />
                  <main className="pt-5 mx-lg-5" style={{minHeight: "100vh"}}>
                     <div className="container-fluid mt-5">
+                    <TotalOrdersChart
+                        qty={this.summarizeTotalOrdersReport()}
+                    />
 
-                    <div className="card mb-4 wow fadeIn">
+                    <TotalProductsSold
+                        products={this.summarizeProducts()}
+                        qty={this.summarizeTotalProductsSoldReport()}
+                    />
 
-                        <div className="card-body">
-                            <h6 style={{marginBottom: '1em'}}>Total Orders</h6>
-                            <Chart
-                                options={this.state.option1}
-                                series={this.state.series1}
-                                type="bar"
-                                height="300"
-                                style={{marginBottom: '4em'}}
-                            />
-
-                        </div>
-
-                    </div>
-
-                        <div className="card mb-4 wow fadeIn">
-
-                            <div className="card-body">
-                                <h6 style={{marginBottom: '1em'}}>Total Product Sold</h6>
-                                <select class="browser-default custom-select" style={{ float: 'right', marginBottom: '1em'}}>
-                                    <option selected>Today</option>
-                                    <option value="1">This Week</option>
-                                    <option value="2">This Month</option>
-                                    <option value="3">Last Month</option>
-                                </select>
-                                <Chart
-                                    options={this.state.option2}
-                                    series={this.state.series2}
-                                    type="bar"
-                                    height="300"
-                                    style={{marginBottom: '4em'}}
-                                />
-
-                            </div>
-
-                        </div>
-
-                        <div className="card mb-4 wow fadeIn">
-
-                            <div className="card-body">
-                            <h6 style={{marginBottom: '1em'}}>Total Sales</h6>
-                               <b >Today's Sale = &#8369; 2050</b>
-                               <hr/>
-                                <div style={{marginTop: '1em'}}>
-                                    <p>This week's sales</p>
-                                    <Chart
-                                        options={this.state.option3}
-                                        series={this.state.series3}
-                                        type="bar"
-                                        height="300"
-                                        style={{marginBottom: '4em'}}
-                                    />
-                                </div>
-                                <hr/>
-                                <div style={{marginTop: '1em'}}>
-                                    <p>This year's sales</p>
-                                    <Chart
-                                        options={this.state.option4}
-                                        series={this.state.series4}
-                                        type="bar"
-                                        height="300"
-                                        style={{marginBottom: '4em'}}
-                                    />
-                                </div>
-                            </div>
-
-                        </div>
-                    
+                    <Sales
+                        weeklyData={this.summarizeWeeklyReport()}
+                        yearlyData={this.summarizeYearlyReport()}
+                        totalDailySales={this.summarizeDailySales()}
+                    />
                     </div>
                 </main>
             </div>
@@ -195,7 +238,9 @@ class Container extends React.PureComponent<> {
 }
 
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+    userId: state.userStore.user && state.userStore.user.id,
+});
 
 const mapDispatchToProps = dispatch => ({
     logout: () => dispatch(AuthService.logout()),
