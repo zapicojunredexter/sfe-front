@@ -5,6 +5,8 @@ import Header from '../../components/header';
 import SideBar from '../../components/vendor.sidebar';
 import ReactTable from 'react-table';
 import OrderService from '../../services/orders.service';
+import UserService from '../../services/user.service';
+
 import 'react-table/react-table.css';
 
 class Container extends React.PureComponent<> {
@@ -28,11 +30,11 @@ class Container extends React.PureComponent<> {
             this.listener();
         }
     }
-    updateOrderStatus = (orderId, status) => {
+    updateOrderStatus = async (orderId, status) => {
         const payload = {
             status,
         };
-        OrderService.update(orderId, payload)()
+        await OrderService.update(orderId, payload)()
             .then(() => {
                 alert('successfully updated');
             })
@@ -85,11 +87,22 @@ class Container extends React.PureComponent<> {
                     const canAcceptReject = original.status && original.status === 'waiting';
                     const canBeDelivered = original.status && original.status === 'accepted';
                     const canBeFinished = original.status && original.status === 'delivery';
+                    const { customer } = original;
                     return (
                         <span>
                             {canAcceptReject && (
                                 <>
-                                <button onClick={() => this.updateOrderStatus(original.id, 'accepted')}>
+                                <button onClick={() => {
+                                    this.updateOrderStatus(original.id, 'accepted')
+                                        .then(() => {
+                                            UserService.sendNotifToUser(customer.id, {
+                                                title: 'Your order has been accepted',
+                                                message: 'Item is being prepared'
+                                            })
+                                            .then(() => {})
+                                            .catch(err => {});
+                                        });
+                                    }}>
                                     accept
                                 </button>
                                 <button onClick={() => this.updateOrderStatus(original.id, 'rejected')}>
@@ -98,7 +111,17 @@ class Container extends React.PureComponent<> {
                                 </>
                             )}
                             {canBeDelivered && (
-                                <button onClick={() => this.updateOrderStatus(original.id, 'delivery')}>start delivery</button>
+                                <button onClick={() => {
+                                    this.updateOrderStatus(original.id, 'delivery').then(() => {
+                                        console.log('sending notif')
+                                        UserService.sendNotifToUser(customer.id, {
+                                            title: 'Your order is being delivered',
+                                            message: 'Item is on its way'
+                                        })
+                                        .then(() => console.log('notif sent'))
+                                        .catch(err => console.log('notif not sent', err));
+                                    });
+                                }}>start delivery</button>
                             )}
                             {canBeFinished && (
                                 <button onClick={() => this.updateOrderStatus(original.id, 'delivered')}>finish transaction</button>    

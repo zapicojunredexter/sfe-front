@@ -2,6 +2,7 @@ import firebase from 'firebase/app';
 import 'firebase/firestore';
 
 import StoreService from './store.service';
+import NotificationService from './notification.service';
 
 export default class Service {
 
@@ -142,6 +143,22 @@ export default class Service {
             return user;
         } catch(err) {
             throw err;
+        }
+    }
+
+
+    static sendNotifToUser = async (userId, notification) => {
+        try {
+            const user = await Service.find(userId);
+            if(user.notifToken){
+                const payload = {
+                    to: user.notifToken,
+                    notification,
+                }
+                await NotificationService.sendNotification(payload);
+            }
+        } catch (err){
+            alert(err.message);
         }
     }
 };
