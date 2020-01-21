@@ -75,7 +75,7 @@
 
 .homepage{
     &__container{
-        background-image: url('http://localhost:3000/images/try.jpg');
+        background-image: url('/images/try.jpg');
         background-attachment: fixed;
         background-position: center;
         background-repeat: no-repeat;
@@ -125,7 +125,7 @@
 
 .about{
     &__container{
-        background-image: url('http://localhost:3000/images/about.png');
+        background-image: url('/images/about.png');
         background-attachment: fixed;
         background-position: center;
         background-repeat: no-repeat;
@@ -159,7 +159,7 @@
 
 .how{
     &__container{
-        background-image: url('http://localhost:3000/images/howto.png');
+        background-image: url('/images/howto.png');
         background-position: center;
         background-repeat: no-repeat;
         background-size: cover;
@@ -186,7 +186,7 @@
 
 .faq{
     &__container{
-        background-image: url('http://localhost:3000/images/faq.png');
+        background-image: url('/images/faq.png');
         background-position: center;
         background-repeat: no-repeat;
         background-size: cover;
@@ -216,7 +216,7 @@
 
 .contact{
     &__container{
-        background-image: url('http://localhost:3000/images/contact.png');
+        background-image: url('/images/contact.png');
         background-position: center;
         background-repeat: no-repeat;
         background-size: cover;
