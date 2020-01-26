@@ -18,12 +18,14 @@ class Container extends React.PureComponent<> {
                         <i className="fas fa-users mr-3"></i>Reviews
                     </Link>
                     */}
-                    
+                    {/*
                     <Link to="" className={this.props.currentPage==="dashboard"?"list-group-item active waves-effect":"list-group-item waves-effect"}>
                         <i className="fas fa-user mr-3"></i>Admin Dashboard
                     </Link>
+                    */}
+                    
                     <Link to="pending_accounts" className={this.props.currentPage==="PendingAccounts"?"list-group-item active waves-effect":"list-group-item waves-effect"}>
-                        <i className="fas fa-user mr-3"></i>Pending Accounts
+                        <i className="fas fa-user mr-3"></i>Accounts
                     </Link>
                 
                 </div>

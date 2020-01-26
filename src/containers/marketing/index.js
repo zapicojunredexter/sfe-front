@@ -78,6 +78,7 @@ class Container extends React.PureComponent<> {
         UserService.registerStore(user, store)
             .then(() => {
                 alert('success');
+                this.setState({showRegisterModal: false});
             })
             .catch(err => alert(err.message));
     }
@@ -134,7 +135,7 @@ class Container extends React.PureComponent<> {
                       <a href="https://play.google.com/store?hl=en" target="_blank"><img src="images/playstore.png" className="playstore-image"/> </a>
                       <a href="https://www.apple.com/ios/app-store/" target="_blank"><img src="images/applestore.png" className="apple-image"/></a>
                     </div>
-                    <RegisterModal onSubmit={this.register} onClose={this.showRegisterModal} show={this.state.showRegisterModal}/>
+                    <RegisterModal onSubmit={this.register} onClose={() => { this.setState({showRegisterModal: false}) }} show={this.state.showRegisterModal}/>
                     
                 </div>
 

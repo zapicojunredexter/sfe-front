@@ -6,6 +6,7 @@ import SideBar from '../../components/admin.sidebar';
 import ReactTable from 'react-table';
 import UserService from '../../services/user.service';
 import StoresService from '../../services/store.service';
+import CustomersService from '../../services/customers.service';
 import { arrayToObject } from '../../utils/common.util';
 import Loader from '../../components/loader';
 import 'react-table/react-table.css';
@@ -15,9 +16,12 @@ class Container extends React.PureComponent<> {
 
     storesListener = null;
 
+    customersListener = null;
+
     state = {
         usersObj: {},
         storesObj: {},
+        customersObj: {},
     };
 
     componentDidMount(){
@@ -29,6 +33,10 @@ class Container extends React.PureComponent<> {
         this.storesListener = StoresService.createListener((data) => {
             this.setState({storesObj: arrayToObject(data, 'id')});
         });
+
+        this.customersListener = CustomersService.createListener((data) => {
+            this.setState({customersObj: arrayToObject(data, 'id')});
+        })
     }
 
     updateStoreStatus = (id, newKeyValues) => {
@@ -51,10 +59,13 @@ class Container extends React.PureComponent<> {
         if(this.storesListener){
             this.storesListener();
         }
+        if(this.customersListener){
+            this.customersListener();
+        }
     }
     render() {
 
-         const columns =[{
+         const storesColumns = [{
             Header: 'User ID',
             accessor: 'id'
             
@@ -108,12 +119,40 @@ class Container extends React.PureComponent<> {
             )
            
          }];
-         const { usersObj, storesObj } = this.state;
-         const data = Object.values(usersObj).map(user => ({
+
+         const customerColumns = [{
+            Header: 'User ID',
+            accessor: 'id'
+         },
+         {
+            Header: 'Name',
+            accessor: 'name',
+            filterable: true
+         },
+         {
+             Header: 'Contact Number',
+             accessor: 'contactNumber',
+             filterable: true
+         },
+         {
+             Header: 'Address',
+             filterable: true,
+             accessor: 'address'
+         }
+         ];
+         const { usersObj, storesObj, customersObj } = this.state;
+         const stores = Object.values(usersObj).map(user => ({
              ...storesObj[user.id],
              ...user,
          }))
          .filter(user => user.type === 'store');
+
+         const customers = Object.values(usersObj).map(user => ({
+            ...customersObj[user.id],
+            ...user,
+        }))
+        .filter(user => user.type === 'customer');
+
         
         return (
             <div>
@@ -136,8 +175,8 @@ class Container extends React.PureComponent<> {
                                 </h4>
 
                                 <ReactTable style={{marginTop: "2em"}}
-                                    data = {data}
-                                    columns = {columns}
+                                    data = {stores}
+                                    columns = {storesColumns}
                                     defaultPageSize = {10}
                                     pageSizeOptions = {[10,30,50]}
                                     minRows = {1}
@@ -145,6 +184,22 @@ class Container extends React.PureComponent<> {
 
                             </div>
 
+
+
+                            <div className="card-body">
+                                <h4 className="mb-2 mb-sm-0 pt-1">
+                                    <span>Customer Accounts</span>
+                                </h4>
+
+                                <ReactTable style={{marginTop: "2em"}}
+                                    data = {customers}
+                                    columns = {customerColumns}
+                                    defaultPageSize = {10}
+                                    pageSizeOptions = {[10,30,50]}
+                                    minRows = {1}
+                                />
+
+                            </div>
                         </div>
                     </div>
                 </main>
