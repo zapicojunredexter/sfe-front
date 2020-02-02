@@ -45,6 +45,12 @@ export default class Service {
         return data;
     }
 
+    static getStoreOrders = async (storeId) => {
+        const documents = await Service.collection().where('store.id','==',storeId).where('status', '==','waiting').get();
+        const list = documents.docs.map(data => ({id: data.id, ...data.data()}))
+        return list;
+    }
+
     static find = async (docId) => {
         const data = await Service.collection().doc(docId).get().then(res => ({id: res.id, ...res.data()}));
         return data;

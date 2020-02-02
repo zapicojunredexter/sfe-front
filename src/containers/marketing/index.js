@@ -6,6 +6,8 @@ import { setUser, setIsLoggedIn } from '../../redux/user/user.action';
 import LoginModal from './modals/login';
 import RegisterModal from './modals/registration';
 import Loader from '../../components/loader';
+import OrderService from '../../services/orders.service';
+import {NotificationManager} from 'react-notifications';
 import './style.scss'
 
 class Container extends React.PureComponent<> {
@@ -62,6 +64,20 @@ class Container extends React.PureComponent<> {
                     this.props.setUser(user);
                     this.props.setIsLoggedIn();
                     this.setState({isInitializing: false});
+                    if(user.id) {
+                        console.log('going in');
+                        OrderService.getStoreOrders(user.id)
+                            .then(data => {
+                                console.log('waiting orders', data);
+                                const waitingOrders = data;
+                                // const waitingOrders = data.filter(dat => dat.status === 'waiting');
+                                if(waitingOrders.length) {
+                                    NotificationManager.info(`You have ${waitingOrders.length} new ${waitingOrders.length === 1 ? `order` : `orders`}`,'New Orders!', 10000);
+                                }
+                            })
+                            .catch(() => {});
+                        
+                    }
                 } else {
                     // should be remade to support admin credentials
                     this.props.setUser(user);

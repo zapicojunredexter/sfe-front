@@ -11,12 +11,38 @@ import AccountSettings from './containers/account.settings';
 import Marketing from './containers/marketing';
 import { setIsLoggedOut } from './redux/user/user.action';
 import FirebaseService from './services/firebase.service';
+import OrderService from './services/orders.service';
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
 
 import './App.css';
 
 FirebaseService();
 
 class App extends React.PureComponent<> {
+
+    componentDidMount(){
+        this.createNotification();
+    }
+    createNotification = async () => {
+    // return () => {
+    //   switch (type) {
+    //     case 'info':
+    //       NotificationManager.info('Info message');
+    //       break;
+    //     case 'success':
+    //       NotificationManager.success('Success message', 'Title here');
+    //       break;
+    //     case 'warning':
+    //       NotificationManager.warning('Warning message', 'Close after 3000ms', 3000);
+    //       break;
+    //     case 'error':
+    //       NotificationManager.error('Error message', 'Click me!', 5000, () => {
+    //         alert('callback');
+    //       });
+    //       break;
+    //   }
+    };
 
     protectedRoute = props => {
         if (this.props.isLoggedIn) {
@@ -61,7 +87,6 @@ class App extends React.PureComponent<> {
                     '/pending_accounts': '/pending_accounts'
                 }
             }
-            console.log('mao nis ha', this.props.userType, validUrls[this.props.userType][fromUrl], fromUrl);
             return (this.props.userType && validUrls[this.props.userType] && validUrls[this.props.userType][fromUrl]) || '/';
         };
         return (
@@ -75,10 +100,13 @@ class App extends React.PureComponent<> {
 
     render(){
         return (
+            <>
+            <NotificationContainer/>
             <Switch>
                 <Route path="/login" render={this.loginRoute} />
                 <Route path="/" render={this.protectedRoute} />
             </Switch>
+            </>
         );
     }
 }
@@ -86,6 +114,7 @@ class App extends React.PureComponent<> {
 
 const mapStateToProps = state => ({
     userType: state.userStore.user && state.userStore.user.type,
+    userId: state.userStore.user && state.userStore.user.id,
     isLoggedIn: state.userStore.isLoggedIn
 });
 
