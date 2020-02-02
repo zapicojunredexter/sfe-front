@@ -75,7 +75,6 @@ class Container extends React.PureComponent<> {
             accessor: 'name',
             id: 'name',
             filterable: true
-            
          },
          {
             Header: 'Contact #',
@@ -86,6 +85,21 @@ class Container extends React.PureComponent<> {
             Header: 'Location',
             accessor: 'address',
             filterable: true
+         },
+         {
+            Header: 'Files',
+            Cell: ({original}) => (
+                <span>
+                    <ul>
+                        {original.requirements && original.requirements.map((requirement, index) => (
+                            <li>
+                                <a href={requirement} target="_blank">Item {index + 1}</a>
+                            </li>
+                        ))}
+                    </ul>
+                </span>
+                
+            )
          },
          {
             Header: 'Account Status',
@@ -99,7 +113,6 @@ class Container extends React.PureComponent<> {
                 </span>
                 
             )
-           
          },
          {
             Header: 'Actions',

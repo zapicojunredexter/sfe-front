@@ -1,6 +1,7 @@
 
 
 import React from 'react';
+import StorageService from '../../../services/storage.service';
 
 class Container extends React.PureComponent<> {
 
@@ -11,6 +12,7 @@ class Container extends React.PureComponent<> {
         description: '',
         contactNumber: '',
         location: '',
+        requirements: [],
     };
 
     onClose = e => {
@@ -49,12 +51,19 @@ class Container extends React.PureComponent<> {
                                     <input value={this.state.password} onChange={e => this.handleChange('password', e.target.value)} type="password" id="regpass" className="form-control" />
                                     <label for="regpass">Type your password</label>
                                 </div>
-                                {/*
-                                <div className="md-form">
-                                    <input value={this.state.password} onChange={e => this.handleChange('password', e.target.value)} type="password" id="regpass2" className="form-control" />
-                                    <label for="regpass2">Re-Type your password</label>
-                                </div>
-                                */}
+                                    <input onChange={async ev => {
+                                        try {
+
+                                            const files = Object.values(ev.target.files);
+                                            const paths = await StorageService.uploadFile(files)();;
+                                            this.setState({requirements: paths});
+                                        } catch (err) {
+                                            alert(err.message);
+                                        }
+
+                                    }} type="file" multiple className="form-control" />
+                                    <span>{this.state.requirements.length} files uploaded</span>
+                                
                                 
                                 <p>Store Information</p>
                                 <div className="md-form">
@@ -93,6 +102,7 @@ class Container extends React.PureComponent<> {
                                 const user = {
                                     username: this.state.username,
                                     password: this.state.password,
+                                    requirements: this.state.requirements,
                                 };
                                 const store = {
                                     name: this.state.name,
