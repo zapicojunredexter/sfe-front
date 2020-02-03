@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import firebase from 'firebase/app';
 import AuthService from '../../services/auth.service';
 import Header from '../../components/header';
 import SideBar from '../../components/vendor.sidebar';
@@ -33,6 +34,7 @@ class Container extends React.PureComponent<> {
     updateOrderStatus = async (orderId, status) => {
         const payload = {
             status,
+            [`${status}Date`]: firebase.firestore.FieldValue.serverTimestamp(),
         };
         await OrderService.update(orderId, payload)()
             .then(() => {
