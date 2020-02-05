@@ -5,6 +5,7 @@ import AuthService from '../../services/auth.service';
 import Header from '../../components/header';
 import SideBar from '../../components/vendor.sidebar';
 import ReactTable from 'react-table';
+import OrderModal from './modal/orderhistory';
 import OrderService from '../../services/orders.service';
 import UserService from '../../services/user.service';
 
@@ -14,7 +15,8 @@ class Container extends React.PureComponent<> {
     listener = null;
 
     state = {
-        orders: []
+        orders: [],
+        show: false,
     };
     componentDidMount(){
         this.closeListener();
@@ -44,6 +46,13 @@ class Container extends React.PureComponent<> {
                 alert(err.message);
             })
     }
+
+    toggleOrderModal = () => 
+        this.setState({
+            showOrderModal: !this.state.showOrderModal
+        })
+
+
     render() {
         const columns =[
             {
@@ -76,16 +85,31 @@ class Container extends React.PureComponent<> {
                 // width: 110
             },
             {
+                Header: 'Start Time',
+                accessor: 'startTime',
+                width: 90
+            },
+            {
+                Header: 'End Time',
+                accessor: 'endTime',
+                width: 90
+            },
+            {
+                Header: 'Total Delivery Time',
+                accessor: 'totalTime',
+                width: 90
+            },
+            {
                 Header: 'Status',
                 accessor: 'status',
-                // width: 110
+                width: 80
             },
             {
                 Header: 'Actions',
                 accessor: '',
                 Cell: ({original}) => {
                     const statuses = ['waiting', 'accepted','rejected','delivery', 'delivered'];
-                    // ['cancelled','waiting', 'accepted','rejected','delivery', 'delivered']
+                    // ['cancelled',' ', 'accepted','rejected','delivery', 'delivered']
                     const canAcceptReject = original.status && original.status === 'waiting';
                     const canBeDelivered = original.status && original.status === 'accepted';
                     const canBeFinished = original.status && original.status === 'delivery';
@@ -104,10 +128,10 @@ class Container extends React.PureComponent<> {
                                             .then(() => {})
                                             .catch(err => {});
                                         });
-                                    }}>
+                                    }} class="btn btn-dark-green btn-sm">
                                     accept
                                 </button>
-                                <button onClick={() => this.updateOrderStatus(original.id, 'rejected')}>
+                                <button onClick={() => this.updateOrderStatus(original.id, 'rejected')} class="btn btn-danger btn-sm">
                                     reject
                                 </button>
                                 </>
@@ -123,10 +147,11 @@ class Container extends React.PureComponent<> {
                                         .then(() => console.log('notif sent'))
                                         .catch(err => console.log('notif not sent', err));
                                     });
-                                }}>start delivery</button>
+                                   
+                                }}  class="btn btn-info btn-sm" >start delivery</button>
                             )}
                             {canBeFinished && (
-                                <button onClick={() => this.updateOrderStatus(original.id, 'delivered')}>finish transaction</button>    
+                                <button onClick={() => this.updateOrderStatus(original.id, 'delivered')} class="btn btn-success btn-sm" >finish transaction</button>    
                             )}
                         </span>
                     );
@@ -145,6 +170,8 @@ class Container extends React.PureComponent<> {
                 />
                  <main className="pt-5 mx-lg-5" style={{minHeight: "100vh"}}>
                     <div className="container-fluid mt-5">
+                        <button className="btn btn-md btn-info" type="button" onClick = {e => { this.toggleOrderModal(); }}>Order Details</button>
+                        <OrderModal onClose={this.toggleOrderModal} show={this.state.showOrderModal}/>
 
                         <div className="card mb-4 wow fadeIn">
 

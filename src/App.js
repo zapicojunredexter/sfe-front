@@ -9,6 +9,7 @@ import AdminDashboard from './containers/dashboard';
 import PendingAccounts from './containers/pending.accounts';
 import AccountSettings from './containers/account.settings';
 import Marketing from './containers/marketing';
+import Terms from './containers/marketing/termsandcondition'
 import { setIsLoggedOut } from './redux/user/user.action';
 import FirebaseService from './services/firebase.service';
 import OrderService from './services/orders.service';
@@ -54,6 +55,7 @@ class App extends React.PureComponent<> {
                     <Route path="/reviews" exact component={Reviews} />
                     <Route path="/account_settings" exact component={AccountSettings} />
                     <Route path="/pending_accounts" exact component={PendingAccounts} />
+                    <Route path="/terms_and_conditions" exact component={Terms} />
                     <Route path="/" component={isAdmin ? AdminDashboard : VendorDashboard} />
                 </Switch>
             );

@@ -2,6 +2,7 @@
 
 import React from 'react';
 import StorageService from '../../../services/storage.service';
+import { Link } from 'react-router-dom';
 
 class Container extends React.PureComponent<> {
 
@@ -90,7 +91,9 @@ class Container extends React.PureComponent<> {
                                     <li>Requirement 4</li>
                                 </ul>
                                 <input type="checkbox" />
-                                <span className="terms">Check here to indicate that you have read and agree to the <a className="text-info" target="_blank" href="">Terms and Conditions</a> of Street Food Express.</span> 
+                                <span className="terms">Check here to indicate that you have read and agree to the 
+                                <Link to="terms_and_conditions" className="text-info" target="_blank">Terms and Conditions</Link>
+                                of Street Food Express.</span> 
                             </div>
                         </div>
                     <div className="modal-footer">
