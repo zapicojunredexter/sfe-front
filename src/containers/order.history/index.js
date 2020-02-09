@@ -16,7 +16,7 @@ class Container extends React.PureComponent<> {
 
     state = {
         orders: [],
-        show: false,
+        orderDetails: false,
     };
     componentDidMount(){
         this.closeListener();
@@ -47,11 +47,6 @@ class Container extends React.PureComponent<> {
             })
     }
 
-    toggleOrderModal = () => 
-        this.setState({
-            showOrderModal: !this.state.showOrderModal
-        })
-
 
     render() {
         const columns =[
@@ -59,45 +54,31 @@ class Container extends React.PureComponent<> {
                 Header: 'Id',
                 accessor: 'id',
                 // width: 100,
-                filterable: true
+                filterable: true,
+                // Cell: ({original}) => (
+                //     <button
+                //         className="btn btn-md btn-info"
+                //         type="button"
+                //         onClick = {e => {
+                //             this.toggleOrderModal();
+                //         }}>
+                //         Order Details
+                //     </button>
+                // ),
+                Cell: ({original}) => (
+                    <a
+                        style={{textDecoration: 'underline'}}
+                        onClick={() => {
+                            this.setState({orderDetails: original})
+                        }}>{original.id}</a>
+                )
             },
+            
             {
                 Header: 'Customer Name',
                 accessor: (row) => row.customer.name,
                 id: 'testing',
                 filterable: true
-            },
-            {
-                Header: 'Ordered Product/s',
-                accessor: 'carts',
-
-                Cell: ({original}) => {
-                return <span>{original.cart.map(car => car.itemName)}</span>
-                },
-                filterable: true
-            },
-            {
-                Header: 'Number of Items',
-                accessor: 'stockQty',
-                Cell: ({original}) => {
-                    return <span>{original.cart.length}</span>
-                },
-                // width: 110
-            },
-            {
-                Header: 'Start Time',
-                accessor: 'startTime',
-                width: 90
-            },
-            {
-                Header: 'End Time',
-                accessor: 'endTime',
-                width: 90
-            },
-            {
-                Header: 'Total Delivery Time',
-                accessor: 'totalTime',
-                width: 90
             },
             {
                 Header: 'Status',
@@ -115,7 +96,7 @@ class Container extends React.PureComponent<> {
                     const canBeFinished = original.status && original.status === 'delivery';
                     const { customer } = original;
                     return (
-                        <span>
+                        <span style={{flex: '1',display: 'flex', justifyContent: 'center', alignItems:'center'}}>
                             {canAcceptReject && (
                                 <>
                                 <button onClick={() => {
@@ -156,7 +137,39 @@ class Container extends React.PureComponent<> {
                         </span>
                     );
                 },
+                width: 280
+            },
+            {
+                Header: 'Ordered Product/s',
+                accessor: 'carts',
+
+                Cell: ({original}) => {
+                return <span>{original.cart.map(car => car.itemName)}</span>
+                },
+                // filterable: true
+            },
+            {
+                Header: 'Number of Items',
+                accessor: 'stockQty',
+                Cell: ({original}) => {
+                    return <span>{original.cart.length}</span>
+                },
                 // width: 110
+            },
+            {
+                Header: 'Start Time',
+                accessor: 'startTime',
+                width: 90
+            },
+            {
+                Header: 'End Time',
+                accessor: 'endTime',
+                width: 90
+            },
+            {
+                Header: 'Total Delivery Time',
+                accessor: 'totalTime',
+                width: 90
             },
         ];
 
@@ -170,8 +183,13 @@ class Container extends React.PureComponent<> {
                 />
                  <main className="pt-5 mx-lg-5" style={{minHeight: "100vh"}}>
                     <div className="container-fluid mt-5">
-                        <button className="btn btn-md btn-info" type="button" onClick = {e => { this.toggleOrderModal(); }}>Order Details</button>
-                        <OrderModal onClose={this.toggleOrderModal} show={this.state.showOrderModal}/>
+                        <OrderModal
+                            onClose={() => {
+                                this.setState({orderDetails: null})
+                            }}
+                            show={this.state.orderDetails}
+                            orderDetails={this.state.orderDetails}
+                        />
 
                         <div className="card mb-4 wow fadeIn">
 

@@ -55,7 +55,6 @@ class App extends React.PureComponent<> {
                     <Route path="/reviews" exact component={Reviews} />
                     <Route path="/account_settings" exact component={AccountSettings} />
                     <Route path="/pending_accounts" exact component={PendingAccounts} />
-                    <Route path="/terms_and_conditions" exact component={Terms} />
                     <Route path="/" component={isAdmin ? AdminDashboard : VendorDashboard} />
                 </Switch>
             );
@@ -106,6 +105,7 @@ class App extends React.PureComponent<> {
             <NotificationContainer/>
             <Switch>
                 <Route path="/login" render={this.loginRoute} />
+                <Route path="/terms_and_conditions" exact component={Terms} />
                 <Route path="/" render={this.protectedRoute} />
             </Switch>
             </>
