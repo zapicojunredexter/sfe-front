@@ -4,6 +4,7 @@ import AuthService from '../../services/auth.service';
 import Header from '../../components/header';
 import SideBar from '../../components/vendor.sidebar';
 import AddModal from './modals/addmodal';
+import AddItem from './modals/additem';
 import EditModal from './modals/editmodal';
 import ReactTable from 'react-table';
 import Image from '../../components/image';
@@ -42,6 +43,12 @@ class Container extends React.PureComponent<> {
         this.setState({
             showAddModal: !this.state.showAddModal
     })
+
+    toggleAddItem = () => 
+        this.setState({
+            showAddItem: !this.state.showAddItem
+    })
+    
     
     toggleEditModal = () => 
         this.setState({
@@ -191,7 +198,11 @@ class Container extends React.PureComponent<> {
                                     
                                     <button onClick = {e => {
                                         this.toggleAddModal();
-                                    }} type="button" className="btn btn-info btn-sm"  style={{marginLeft: '1.5em'}}><i className="fas fa-plus mr-2"></i>Add Product</button>
+                                    }} type="button" className="btn btn-info btn-sm"  style={{marginLeft: '1.5em'}}><i className="fas fa-plus mr-2"></i>Create Product</button>
+
+                                    <button onClick = {e => {
+                                        this.toggleAddItem();
+                                    }} type="button" className="btn btn-info btn-sm"  style={{marginLeft: '1.5em'}}><i className="fas fa-plus mr-2"></i>Add Item</button>
                                 </h4>
 
                                <AddModal
@@ -212,6 +223,13 @@ class Container extends React.PureComponent<> {
                                             });
                                     }}
                                 />
+
+                                <AddItem
+                                    onClose={this.toggleAddItem}
+                                    show={this.state.showAddItem}
+                                   
+                                />
+
                                 {!!this.state.toEdit && (
                                     <EditModal
                                         onClose={() => this.setState({toEdit: null})}

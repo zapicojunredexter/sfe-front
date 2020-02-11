@@ -99,7 +99,7 @@ class Container extends React.PureComponent<> {
                                     <label className="active" for="productDescription">Description</label>
                                 </div>
                                 <div className="md-form">
-                                    <input value={this.state.stockQty} onChange={ev => this.handleChange('stockQty',ev.target.value)} type="number" id="productQty" className="form-control"/>
+                                    <input value={this.state.stockQty} onChange={ev => this.handleChange('stockQty',ev.target.value)} type="number" id="productQty" className="form-control" disabled/>
                                     <label className="active" for="productQty">Stock Quantity</label>
                                 </div>
                                 <div className="md-form">
