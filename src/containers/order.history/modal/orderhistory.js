@@ -46,6 +46,14 @@ class Container extends React.PureComponent<> {
                                 <b>{orderDetails.customer && orderDetails.customer.name}</b>
                             </div>
                         </div>
+                        <div class="row" class="row" style={{marginBottom: ".5em"}}>
+                            <div class="col-md col-6">
+                                Delivery Address:
+                            </div>
+                            <div class="col-md col-6 ">
+                                <b>{orderDetails.deliveryAddress}</b>
+                            </div>
+                        </div>
                         <div class="row" style={{marginBottom: ".5em"}}>
                             <div class="col-md col-6">
                                 Ordered Product/s:
@@ -64,6 +72,14 @@ class Container extends React.PureComponent<> {
                             </div>
                             <div class="col-md col-6 ">
                                 <b>{orderDetails.cart && orderDetails.cart.length}</b>
+                            </div>
+                        </div>
+                        <div class="row" style={{marginBottom: ".5em"}}>
+                            <div class="col-md col-6">
+                                Total Cost:
+                            </div>
+                            <div class="col-md col-6 ">
+                                <b>{orderDetails.payment && orderDetails.payment.total}</b>
                             </div>
                         </div>
                         <div class="row" class="row" style={{marginBottom: ".5em"}}>
