@@ -63,4 +63,30 @@ export default class Service {
             callback(data);
         });
     }
+
+
+    static updateQtyBulk = async products => {
+        try {
+            const productIds = Object.keys(products);
+            await Promise.all(productIds.map(async productId => {
+                const product = products[productId];
+
+                if(product.add && !Number.isNaN(product.add)) {
+                    await Service.collection().doc(productId).update({
+                        stockQty: firebase.firestore.FieldValue.increment(Number(product.add)),
+                    })
+                }
+
+                if(product.minus && !Number.isNaN(product.minus)) {
+                    await Service.collection().doc(productId).update({
+                        stockQty: firebase.firestore.FieldValue.increment(Number(product.minus * -1)),
+                    })
+                }
+            }))
+
+        } catch (err){
+            throw err;
+        }
+
+    }
 };

@@ -3,23 +3,35 @@ import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 
 class Container extends React.PureComponent<> {
-
+    state = {
+        productsMap: {},
+    }
 
     onClose = e => {
         this.props.onClose && this.props.onClose(e)
+    }
+
+    addToProducts = (mainKey, secondaryKey, amount) => {
+        const currentState = this.state.productsMap[mainKey];
+        this.setState({
+            productsMap: {
+                ...this.state.productsMap,
+                [mainKey]: {...currentState,[secondaryKey]: amount}
+            },
+        })
     }
 
     render() {
         
         const columns =[{
             Header: 'Product Name',
-            accessor: 'pname',
+            accessor: 'name',
             filterable: true,
             // width: 100
          },
          {
             Header: 'Current Stock Quantity',
-            accessor: 'stockqty',
+            accessor: 'stockQty',
             width: 180
 
          },
@@ -28,8 +40,8 @@ class Container extends React.PureComponent<> {
              accesor: 'addqty',
              Cell: ({original}) => (
                 <div className="md-form" style={{marginTop: '-.5em'}}>
-                 <input  type="number" id="addQty" className="form-control"/>
-                <label for="addQty">Add Quantity</label>
+                 <input  type="number" value={this.state.productsMap && this.state.productsMap[original.id] && this.state.productsMap[original.id].add} onChange={ev => this.addToProducts(original.id, 'add', ev.target.value)} id="addQty" className="form-control"/>
+                <label className={this.state.productsMap && this.state.productsMap[original.id] && this.state.productsMap[original.id].add && 'active'} for="addQty">Add Quantity</label>
                 </div>
              )
          },
@@ -38,8 +50,8 @@ class Container extends React.PureComponent<> {
             accesor: 'minusqty',
             Cell: ({original}) => (
                 <div className="md-form" style={{marginTop: '-.5em'}}>
-                 <input  type="number" id="minusQty" className="form-control"/>
-                <label for="minusQty">Deduct Quantity</label>
+                 <input  type="number" value={this.state.productsMap && this.state.productsMap[original.id] && this.state.productsMap[original.id].minus} onChange={ev => this.addToProducts(original.id, 'minus', ev.target.value)} id="minusQty" className="form-control"/>
+                <label className={ this.state.productsMap && this.state.productsMap[original.id] && this.state.productsMap[original.id].minus && 'active'} for="minusQty">Deduct Quantity</label>
                 </div>
             )
         },
@@ -74,22 +86,9 @@ class Container extends React.PureComponent<> {
         //  }
         ];
 
-        const data = [{
-             pname: 'fried chicken',
-             stockqty: '25 pieces',
-        },
-        {
-            pname: 'siomai',
-            stockqty: '5 servings',
-        },
-        {
-            pname: 'fishball',
-            stockqty: '50 servings',
-       },
-       {
-        pname: 'hawaian pizza',
-        stockqty: '17 boxes',
-       }]
+        const { products } = this.props;
+
+        const data = products;
 
         if(!this.props.show){
             return null;
@@ -106,39 +105,50 @@ class Container extends React.PureComponent<> {
                                 </button>
                             </div>
                             <div className="modal-body">
+                                {/*
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <select class="browser-default custom-select">
-                                            <option selected>Select Product</option>
-                                            <option value="1">Fried Chicken</option>
-                                            <option value="2">Siomai</option>
-                                            <option value="3">Fishball</option>
-                                            <option value="4">Hawaian Pizza</option>
+                                        <select class="browser-default custom-select" onChange={ev => this.setState({productId: ev.target.value})}>
+
+                                            <option value={''}>SELECT ITEM</option>
+                                            {products.map(product => {
+                                                return (
+                                                <option value={product.id}>{product.name}</option>
+                                                )
+                                            })}
                                         </select>
                                     </div>
                                     <div class="col-md-3">
                                         <div className="md-form" style={{marginTop: '-.5em'}}>
-                                            <input  type="number" id="addQty" className="form-control"/>
+                                            <input  type="number" value={this.state.addQty || null} onChange={ev => this.setState({addQty: ev.target.value})} id="addQty" className="form-control"/>
                                             <label for="addQty">Add Quantity</label>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div className="md-form" style={{marginTop: '-.5em'}}>
-                                            <input  type="number" id="minusQty" className="form-control"/>
+                                            <input  type="number" value={this.state.deductQty || null} onChange={ev => this.setState({deductQty: ev.target.value})} id="minusQty" className="form-control"/>
                                             <label for="minusQty">Deduct Quantity</label>
                                         </div>
                                     </div>
                                 </div>
-                                {/* <ReactTable style={{marginTop: "2em"}}
+                                */}
+                                
+                                <ReactTable style={{marginTop: "2em"}}
                                     data = {data}
                                     columns = {columns}
                                     defaultPageSize = {10}
                                     pageSizeOptions = {[10,30,50]}
                                     minRows = {1}
-                                />       */}
+                                />       
                             </div>
                             <div className="modal-footer" style={{borderTop: 'none'}}>
-                            <button type="button" className="btn btn-primary btn-sm waves-effect waves-light" >Save Changes</button>
+                            <button
+                                disabled={Object.keys(this.state.productsMap).length === 0}
+                                type="button" className="btn btn-primary btn-sm waves-effect waves-light"
+                                onClick={() => {
+                                    this.props.submit(this.state.productsMap);
+                                }}
+                            >Save Changes</button>
                              <button onClick = {e => {this.onClose(e); }} type="button" className="btn btn-danger btn-sm waves-effect waves-light" data-dismiss="modal">Close</button>
                             </div>
                         </div>

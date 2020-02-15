@@ -83,7 +83,8 @@ class Container extends React.PureComponent<> {
             {
                 Header: 'Status',
                 accessor: 'status',
-                width: 80
+                width: 80,
+                filterable: true,
             },
             {
                 Header: 'Actions',

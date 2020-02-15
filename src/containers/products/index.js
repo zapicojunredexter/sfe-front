@@ -227,7 +227,18 @@ class Container extends React.PureComponent<> {
                                 <AddItem
                                     onClose={this.toggleAddItem}
                                     show={this.state.showAddItem}
-                                   
+                                    submit={(payload) => {
+                                       alert('ginasubmit'+JSON.stringify(payload));
+                                       ProductService.updateQtyBulk(payload)
+                                        .then(() => {
+                                            alert('success');
+                                            this.toggleAddItem();
+                                        })
+                                        .catch(err => {
+                                            alert(err.message);
+                                        });
+                                   }}
+                                   products = {this.state.products}
                                 />
 
                                 {!!this.state.toEdit && (
