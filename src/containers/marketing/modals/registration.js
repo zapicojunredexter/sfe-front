@@ -85,10 +85,16 @@ class Container extends React.PureComponent<> {
                                 </div>
                                 <p className="registration-requirements">Also, kindly send to <a className="text-info">streetfoodexpresscares@gmail.com</a> the list of requirments written below for the approval of your store.</p>
                                 <ul>
-                                    <li>Requirement 1</li>
-                                    <li>Requirement 2</li>
-                                    <li>Requirement 3</li>
-                                    <li>Requirement 4</li>
+                                    <li>Barangay Clearance</li>
+                                    <li>Bureau of Internal Revenue TIN</li>
+                                    <li>Department of Labor and Employment</li>
+                                    <li>Department of Trade and Industry Business Name</li>
+                                    <li>Registration Certificate</li>
+                                    <li>Mayor's Permit/ Business Permit</li>
+                                    <li>Pag-ibig Employer's Registration</li>
+                                    <li>PhilHealth Employer's Registration</li>
+                                    <li>SEC Registration Certificate</li>
+                                    <li>SSS Employer's Registration</li>
                                 </ul>
                                 <input type="checkbox" />
                                 <span className="terms">Check here to indicate that you have read and agree to the 
