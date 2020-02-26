@@ -50,29 +50,29 @@ class Container extends React.PureComponent<> {
 
     render() {
         const columns =[
-            {
-                Header: 'Id',
-                accessor: 'id',
-                // width: 100,
-                filterable: true,
-                // Cell: ({original}) => (
-                //     <button
-                //         className="btn btn-md btn-info"
-                //         type="button"
-                //         onClick = {e => {
-                //             this.toggleOrderModal();
-                //         }}>
-                //         Order Details
-                //     </button>
-                // ),
-                Cell: ({original}) => (
-                    <a
-                        style={{textDecoration: 'underline'}}
-                        onClick={() => {
-                            this.setState({orderDetails: original})
-                        }}>{original.id}</a>
-                )
-            },
+            // {
+            //     Header: 'Id',
+            //     accessor: 'id',
+            //     // width: 100,
+            //     filterable: true,
+            //     // Cell: ({original}) => (
+            //     //     <button
+            //     //         className="btn btn-md btn-info"
+            //     //         type="button"
+            //     //         onClick = {e => {
+            //     //             this.toggleOrderModal();
+            //     //         }}>
+            //     //         Order Details
+            //     //     </button>
+            //     // ),
+            //     Cell: ({original}) => (
+            //         <a
+            //             style={{textDecoration: 'underline'}}
+            //             onClick={() => {
+            //                 this.setState({orderDetails: original})
+            //             }}>{original.id}</a>
+            //     )
+            // },
             
             {
                 Header: 'Customer Name',

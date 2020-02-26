@@ -125,7 +125,7 @@ class Container extends React.PureComponent<> {
                         })} className="btn btn-success btn-sm">Approve</button> :
                         <button type="button" onClick={() => this.updateStoreStatus(original.id, {
                             isDisabled: true,
-                        })} className="btn btn-danger btn-sm">Decline</button>
+                        })} className="btn btn-danger btn-sm">Block</button>
                     }
                 </div>
                 

@@ -58,12 +58,13 @@ class Container extends React.PureComponent<> {
     toggleSweetAlert = () => this.setState({ showSweetAlert: !this.state.showSweetAlert })
     
     render() {
-         const columns =[{
-            Header: 'Id',
-            accessor: 'id',
-            filterable: true,
-            // width: 100
-         },
+         const columns =[
+         //    }
+        //     Header: 'Id',
+        //     accessor: 'id',
+        //     filterable: true,
+        //     // width: 100
+        //  },
          {
             Header: 'Image',
             accessor: 'image',
