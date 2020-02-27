@@ -4,6 +4,8 @@ import AuthService from '../../services/auth.service';
 import Header from '../../components/header';
 import SideBar from '../../components/admin.sidebar';
 import Chart from "react-apexcharts";
+import StoresService from '../../services/store.service';
+import OrderService from '../../services/orders.service';
 import 'react-table/react-table.css';
 
 class Container extends React.PureComponent<> {
@@ -11,11 +13,6 @@ class Container extends React.PureComponent<> {
         super(props);
 
         this.state = {
-        
-            series1: [{
-                name: 'Weekly Commission',
-                data: [5, 2, 1, 1.3, 1, 2, 4 ]
-              }],
               options1: {
                 chart: {
                   type: 'bar',
@@ -58,12 +55,6 @@ class Container extends React.PureComponent<> {
                   }
                 }
               },
-
-          series2: [{
-            
-            name: 'Monthly Commission',
-            data: [35, 41, 36, 26, 45, 48, 52, 53, 41,21,40,12]
-          }],
           options2: {
             chart: {
               type: 'bar',
@@ -105,12 +96,97 @@ class Container extends React.PureComponent<> {
                 }
               }
             }
-          }
-        
-        
+          },
+          data1: [5, 2, 1, 1.3, 1, 2, 4 ],
+          data2: [35, 41, 36, 26, 45, 48, 52, 53, 41,21,40,12],
+          stores: [],
+          selectedStore: null,
+          orders: [],
         };
-      }
+    }
+
+    componentDidMount(){
+        // this.handleGraphs();
+        this.fetchData();
+    }
+
+    fetchData = async () => {
+        const stores = await StoresService.get();
+        const orders = await OrderService.get();
+        this.setState({stores, orders});
+    }
+
+    handleGraphs = async () => {
+        const orders = await OrderService.get();
+        const data1 = this.generateGraph1();
+        const data2 = this.generateGraph2();
+        this.setState({
+            data1,
+            data2,
+        })
+    }
+
+    generateGraph1 = () => {
+        const { selectedStore, orders } = this.state;
+        const filteredOrders = orders.filter(order => order.store && order.store.id === selectedStore);
+        const dataWithDate = filteredOrders.map(order => ({...order, createdAtMs: order.createdAtMs.toDate()}))
+        
+        // const dataWithDate = [
+        //     {
+        //         createdAtMs: new Date(),
+        //     },
+        //     {
+        //         createdAtMs: new Date(),
+        //     },
+        //     {
+        //         createdAtMs: new Date(),
+        //     },
+        // ];
+        const daysArray = new Array(7).fill(null).map((item,index) => ({day: index}));
+        const daysArrayWithCount = daysArray.map(({day}) => {
+            const count = dataWithDate.filter(data => data.createdAtMs && data.createdAtMs.getDay() === day).length;
+            return {
+                day,
+                count,
+            };
+        });
+        const justCount = daysArrayWithCount.map(data => data.count);
+        return justCount;
+    }
+
+    generateGraph2 = () => {
+        const { selectedStore, orders } = this.state;
+        const filteredOrders = orders.filter(order => order.store && order.store.id === selectedStore);
+        const dataWithDate = filteredOrders.map(order => ({...order, createdAtMs: order.createdAtMs.toDate()}))
+        // const dataWithDate = [
+        //     {
+        //         createdAtMs: new Date(),
+        //     },
+        //     {
+        //         createdAtMs: new Date(),
+        //     },
+        //     {
+        //         createdAtMs: new Date(),
+        //     },
+        // ];
+        const now = new Date();
+        const monthArray = new Array(12).fill(null).map((item,index) => ({month: index}));
+        const monthArrayWithCount = monthArray.map(({month}) => {
+            const count = dataWithDate.filter(data => data.createdAtMs && data.createdAtMs.getFullYear() === now.getFullYear() && data.createdAtMs.getMonth() === month).length;
+            return {
+                month,
+                count,
+            };
+        });
+        const justCount = monthArrayWithCount.map(data => data.count);
+        return justCount;
+    }
+
     render() {
+        const { stores, selectedStore} = this.state;
+        const data1 = this.generateGraph1();
+        const data2 = this.generateGraph2();
+        console.log({data1, data2, stores, selectedStore});
         return (
             <div>
                 <div>
@@ -127,18 +203,30 @@ class Container extends React.PureComponent<> {
                             <div className="card-body">
                                 <h5>Overall Commission: &#8369; </h5>
                                 <h5 style={{marginTop: '1em'}}>Per Store Total Commission: &#8369;</h5>
-                                <select class="browser-default custom-select" style={{marginBottom: '2em'}} >
-                                <option selected>Select a store to view commission</option>
-                                <option value="1">Store 1</option>
-                                <option value="2">Store 2</option>
-                                <option value="3">Store 3</option>
-                                <option value="4">Store 4</option>
+                                <select onChange={(ev) => this.setState({selectedStore: ev.target.value || null})} class="browser-default custom-select" style={{marginBottom: '2em'}} >
+                                <option selected value=''>Select a store to view commission</option>
+                                    {stores.map(store => <option value={store.id}>{store.name}</option>)}
                                 </select>
 
                                 <div id="chart">
-                                <Chart options={this.state.options1} series={this.state.series1} type="bar" height={350} style={{marginBottom: '2em'}} />
+                                <Chart
+                                    options={this.state.options1}
+                                    series={[{
+                                        name: 'Weekly Commission',
+                                        data: data1,
+                                    }]}
+                                    type="bar"
+                                    height={350}
+                                    style={{marginBottom: '2em'}} />
                                 
-                                <Chart options={this.state.options2} series={this.state.series2} type="bar" height={350} />
+                                <Chart
+                                    options={this.state.options2}
+                                    series={[{
+                                        name: 'Monthly Commission',
+                                        data: data2,
+                                    }]}
+                                    type="bar"
+                                    height={350} />
                                 </div>
                             </div>
 
