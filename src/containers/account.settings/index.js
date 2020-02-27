@@ -35,7 +35,7 @@ class Container extends React.PureComponent<> {
             operatingHours: user ? user.operatingHours : '',
             address: user ? user.address : '',
             deliveryFee: user ? user.deliveryFee : '',
-            location: user ? user.location : { latitude: center[1], longitude: center[0] },
+            location: (user && user.location) ? user.location : { latitude: center[1], longitude: center[0] },
             displayPicUrl: user ? user.displayPicUrl : '',
             isImageUploading: false,
         };
