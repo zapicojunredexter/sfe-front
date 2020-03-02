@@ -98,6 +98,10 @@ class Container extends React.PureComponent<> {
                     const { customer } = original;
                     return (
                         <span style={{flex: '1',display: 'flex', justifyContent: 'center', alignItems:'center'}}>
+
+                            <button onClick={() => this.setState({orderDetails: original})} class="btn btn-info btn-sm">
+                                details
+                            </button>
                             {canAcceptReject && (
                                 <>
                                 <button onClick={() => {
